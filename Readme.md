@@ -1,7 +1,7 @@
 # Личный проект «Дела в Порядке»
 
 * Студент: [Henry Tsayukov](https://up.htmlacademy.ru/php/9/user/810549).
-* Наставник: `Неизвестно`.
+* Наставник: [Сергей Шершнев](https://htmlacademy.ru/profile/shv_sergey).
 
 ---
 
