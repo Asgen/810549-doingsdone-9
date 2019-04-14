@@ -3,7 +3,7 @@
 $show_complete_tasks = rand(0, 1);
 
 // Проекты
-$porjects = [
+$projects = [
   "Входящие",
   "Учеба",
   "Работа",
@@ -92,7 +92,7 @@ $tasks = [
 
         <nav class="main-navigation">
           <ul class="main-navigation__list">
-            <?php foreach ($porjects as $key => $value) : ?>
+            <?php foreach ($projects as $value) : ?>
               <li class="main-navigation__list-item">
                 <a class="main-navigation__list-item-link" href="#">
                   <?= $value ?>
@@ -133,38 +133,25 @@ $tasks = [
 
         <table class="tasks">
 
-          <?php foreach ($tasks as $key => $value)
-            if ($tasks[$key]['done'] !== 'Да' || $show_complete_tasks) : ?>
+          <?php foreach ($tasks as $value) :
+            if ($value['done'] !== 'Да' || $show_complete_tasks) : ?>
 
-            <tr class="tasks__item task <?= $tasks[$key]['done'] == 'Да' ? 'task--completed' : '' ?>">
-              <td class="task__select">
-                <label class="checkbox task__checkbox">
-                  <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" value="1">
-                  <span class="checkbox__text"><?= $tasks[$key]['task'] ?></span>
-                </label>
-              </td>
-
-              <td class="task__file">
-                <a class="download-link" href="#">Home.psd</a>
-              </td>
-
-              <td class="task__date"></td>
-            </tr>
-          <?php endif ?>
-
-          <!--показывать следующий тег <tr/>, если переменная $show_complete_tasks равна единице
-          <?php if ($show_complete_tasks): ?>
-            <tr class="tasks__item task task--completed">
-              <td class="task__select">
+              <tr class="tasks__item task <?= $value['done'] == 'Да' ? 'task--completed' : '' ?>">
+                <td class="task__select">
                   <label class="checkbox task__checkbox">
-                      <input class="checkbox__input visually-hidden" type="checkbox" checked>
-                      <span class="checkbox__text">Записаться на интенсив "Базовый PHP"</span>
+                    <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" value="1">
+                    <span class="checkbox__text"><?= $value['task'] ?></span>
                   </label>
-              </td>
-              <td class="task__date">10.10.2019</td>
-              <td class="task__controls"></td>
-            </tr>
-          <?php endif; ?>-->
+                </td>
+
+                <td class="task__file">
+                  <a class="download-link" href="#">Home.psd</a>
+                </td>
+
+                <td class="task__date"></td>
+              </tr>
+            <?php endif ?>
+          <?php endforeach ?>
         </table>
       </main>
     </div>
