@@ -148,7 +148,7 @@ function count_tasks($tasks_arr, $project_name) {
           <?php foreach ($tasks as $value) :
             if ($value['done'] !== 'Да' || $show_complete_tasks) : ?>
 
-              <tr class="tasks__item task <?= $value['done'] == 'Да' ? 'task--completed' : '' ?>">
+              <tr class="tasks__item task <?= $value['done'] === 'Да' ? 'task--completed' : '' ?>">
                 <td class="task__select">
                   <label class="checkbox task__checkbox">
                     <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" value="1">
@@ -160,7 +160,7 @@ function count_tasks($tasks_arr, $project_name) {
                   <a class="download-link" href="#">Home.psd</a>
                 </td>
 
-                <td class="task__date"></td>
+                <td class="task__date"><?= $value['date'] ?></td>
               </tr>
             <?php endif ?>
           <?php endforeach ?>
