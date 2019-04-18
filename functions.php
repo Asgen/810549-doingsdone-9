@@ -53,9 +53,9 @@ function is_important($tasksArr) {
         $current_date =  strtotime($current_date);
         $task_date = strtotime($task_date);
 
-        $days_to_deadline = ($task_date - $current_date) / 3600;
+        $hours_to_deadline = ($task_date - $current_date) / 3600;
 
-        if ($days_to_deadline < 24 && $days_to_deadline >= 0 ) {
+        if ($hours_to_deadline < 24 && $hours_to_deadline >= 0 ) {
           $tasksArr[$key]['important'] = true;
         }
       }
