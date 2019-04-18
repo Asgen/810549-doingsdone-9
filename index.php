@@ -51,29 +51,12 @@ $tasks = [
   ]
 ];
 
-// Функция подсчета задач
-function count_tasks($tasks_arr, $project_name) {
-  $count = 0;
-  foreach ($tasks_arr as $value) {
-    if ($value['category'] == $project_name) {
-      $count++;
-    }
-  }
+require_once('functions.php');
 
-  return $count;
-}
-
-// Функция убирает опысные символы из строки
-function esc($str) {
-  $text = htmlspecialchars($str);
-  //$text = strip_tags($str);
-
-  return $text;
-}
-
-require_once('helpers.php');
-
-$page_content = include_template('main.php', ['tasks' => $tasks]);
+$page_content = include_template('index.php', [
+  'tasks' => $tasks,
+  'show_complete_tasks' => $show_complete_tasks
+]);
 
 $layout_content = include_template('layout.php', [
     'projects' => $projects,
@@ -84,4 +67,3 @@ $layout_content = include_template('layout.php', [
 ]);
 
 print($layout_content);
-?>
