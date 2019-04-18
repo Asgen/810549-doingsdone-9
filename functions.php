@@ -40,3 +40,26 @@ function include_template($name, array $data = []) {
 
     return $result;
 }
+
+// Функция проверки времени для задания
+function is_important($tasksArr) {
+
+    foreach ($tasksArr as $key => $value) {
+      $tasksArr[$key]['important'] = false;
+      if ($value['date'] !== 'Нет') {
+        $current_date = date('d.m.Y');
+        $task_date = $value['date'];
+
+        $current_date =  strtotime($current_date);
+        $task_date = strtotime($task_date);
+
+        $days_to_deadline = ($task_date - $current_date) / 3600;
+
+        if ($days_to_deadline < 24 && $days_to_deadline >= 0 ) {
+          $tasksArr[$key]['important'] = true;
+        }
+      }
+    }
+
+    return $tasksArr;
+}

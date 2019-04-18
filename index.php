@@ -21,7 +21,7 @@ $tasks = [
   ],
   [
     'task' => "Выполнить тестовое задание",
-    'date' => '25.12.2018',
+    'date' => '18.04.2019',
     'category' => 'Работа',
     'done' => 'Нет'
   ],
@@ -52,6 +52,9 @@ $tasks = [
 ];
 
 require_once('functions.php');
+
+$tasks = is_important($tasks);
+//var_dump($tasks);
 
 $page_content = include_template('index.php', [
   'tasks' => $tasks,
