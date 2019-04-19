@@ -28,7 +28,7 @@
 
       <tr class="tasks__item task
         <?= $value['done'] === 'Да' ? 'task--completed' : '' ?>
-        <?= $value['important'] === true ? 'task--important' : '' ?>
+        <?= is_important($value) ?>
       ">
         <td class="task__select">
           <label class="checkbox task__checkbox">

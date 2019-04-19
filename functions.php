@@ -13,9 +13,7 @@ function count_tasks($tasks_arr, $project_name) {
 
 // Функция убирает опысные символы из строки
 function esc($str) {
-  $text = htmlspecialchars($str, ENT_QUOTES);
-
-  return $text;
+  return htmlspecialchars($str, ENT_QUOTES);
 }
 
 /**
@@ -42,24 +40,17 @@ function include_template($name, array $data = []) {
 }
 
 // Функция проверки времени для задания
-function is_important($tasksArr) {
+function is_important($value) {
 
-    foreach ($tasksArr as $key => $value) {
-      $tasksArr[$key]['important'] = false;
-      if ($value['date'] !== 'Нет') {
-        $current_date = date('d.m.Y');
-        $task_date = $value['date'];
+    $current_date =  time();
+    $task_date = strtotime($value['date']);
 
-        $current_date =  strtotime($current_date);
-        $task_date = strtotime($task_date);
+    $hours_to_deadline = floor(($task_date - $current_date) / 3600);
 
-        $hours_to_deadline = ($task_date - $current_date) / 3600;
+    if ($hours_to_deadline <= 24 && $value['done'] !== 'Да') {
 
-        if ($hours_to_deadline <= 24 && $hours_to_deadline >= 0 && $value['done'] !== 'Да') {
-          $tasksArr[$key]['important'] = true;
-        }
-      }
+      return "task--important";
     }
 
-    return $tasksArr;
+return "";
 }
