@@ -26,7 +26,10 @@
   <?php foreach ($tasks as $value) :
     if ($value['done'] !== 'Да' || $show_complete_tasks) : ?>
 
-      <tr class="tasks__item task <?= $value['done'] === 'Да' ? 'task--completed' : '' ?>">
+      <tr class="tasks__item task
+        <?= $value['done'] === 'Да' ? 'task--completed' : '' ?>
+        <?= is_important($value) ? 'task--important' : '' ?>
+      ">
         <td class="task__select">
           <label class="checkbox task__checkbox">
             <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" value="1">

@@ -21,13 +21,13 @@ $tasks = [
   ],
   [
     'task' => "Выполнить тестовое задание",
-    'date' => '25.12.2018',
+    'date' => '21.04.2019',
     'category' => 'Работа',
     'done' => 'Нет'
   ],
   [
     'task' => "Сделать задание первого раздела",
-    'date' => '21.12.2018',
+    'date' => '18.04.2019',
     'category' => 'Учеба',
     'done' => 'Да'
   ],
@@ -51,30 +51,15 @@ $tasks = [
   ]
 ];
 
-// Функция подсчета задач
-function count_tasks($tasks_arr, $project_name) {
-  $count = 0;
-  foreach ($tasks_arr as $value) {
-    if ($value['category'] == $project_name) {
-      $count++;
-    }
-  }
+require_once('functions.php');
 
-  return $count;
-}
+// Подключение шаблона
+$page_content = include_template('index.php', [
+  'tasks' => $tasks,
+  'show_complete_tasks' => $show_complete_tasks
+]);
 
-// Функция убирает опысные символы из строки
-function esc($str) {
-  $text = htmlspecialchars($str);
-  //$text = strip_tags($str);
-
-  return $text;
-}
-
-require_once('helpers.php');
-
-$page_content = include_template('main.php', ['tasks' => $tasks]);
-
+// Поключение лэйаута с включением в него шаблона
 $layout_content = include_template('layout.php', [
     'projects' => $projects,
     'tasks' => $tasks,
@@ -84,4 +69,3 @@ $layout_content = include_template('layout.php', [
 ]);
 
 print($layout_content);
-?>
