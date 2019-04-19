@@ -49,8 +49,8 @@ function is_important($value) {
 
     if ($hours_to_deadline <= 24 && $value['done'] !== 'Да' && $value['date'] !== 'Нет') {
 
-      return "task--important";
+      return true;
     }
 
-return "";
+return false;
 }

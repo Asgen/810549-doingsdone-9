@@ -53,11 +53,13 @@ $tasks = [
 
 require_once('functions.php');
 
+// Подключение шаблона
 $page_content = include_template('index.php', [
   'tasks' => $tasks,
   'show_complete_tasks' => $show_complete_tasks
 ]);
 
+// Поключение лэйаута с включением в него шаблона
 $layout_content = include_template('layout.php', [
     'projects' => $projects,
     'tasks' => $tasks,
