@@ -40,17 +40,16 @@ function include_template($name, array $data = []) {
 }
 
 // Функция проверки времени для задания
-function is_important($value) {
+function is_important($date) {
+
+    if ($date === 'Нет') {
+        return false;
+    }
 
     $current_date =  time();
-    $task_date = strtotime($value['date']);
+    $task_date = strtotime($date);
 
     $hours_to_deadline = floor(($task_date - $current_date) / 3600);
 
-    if ($hours_to_deadline <= 24 && $value['done'] !== 'Да' && $value['date'] !== 'Нет') {
-
-      return true;
-    }
-
-return false;
+return $hours_to_deadline <= 24;
 }
