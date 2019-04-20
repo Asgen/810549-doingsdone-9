@@ -1,0 +1,33 @@
+CREATE DATABASE doingsdone
+  DEFAULT CHARACTER SET utf8
+  DEFAULT COLLATE UTF8_GENERAL_CI;
+
+USE doingsdone;
+
+CREATE TABLE projects (
+  id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  name CHAR(255) UNIQUE DEFAULT 'Мой проект',
+  user_id INT(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE tasks (
+  id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  name CHAR(50) NOT NULL DEFAULT 'Новая задача',
+  dt_add timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  status tinyINT(4) NOT NULL DEFAULT 0,
+  deadline timestamp NULL DEFAULT NULL,
+  user_id INT(11) NOT NULL,
+  project_id INT(11) NOT NULL,
+  file varCHAR(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE users (
+  id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  email CHAR(45) NOT NULL UNIQUE,
+  name CHAR(255) DEFAULT NULL
+) ENGINE=InnoDB CHARSET=utf8;
+
+CREATE INDEX project ON projects(name);
+CREATE INDEX deadline ON tasks(deadline);
+CREATE INDEX task ON tasks(name);
+CREATE INDEX user_email ON users(email);
