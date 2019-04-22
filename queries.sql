@@ -23,3 +23,11 @@ SET name = 'Купить корм для кота', datetime_add = NOW(), user_i
 
 INSERT INTO tasks
 SET name = 'Заказать пиццу', datetime_add = NOW(), user_id = 1, project_id = 4;
+
+/* получить список из всех проектов для одного пользователя */
+SELECT * FROM projects WHERE user_id = 1;
+
+/* Объедините проекты с задачами, чтобы посчитать количество задач в каждом проекте и в дальнейшем выводить эту цифру рядом с именем проекта*/
+SELECT u.NAME, p.NAME, t.name FROM tasks t
+INNER JOIN projects p ON t.project_id = p.id
+INNER JOIN users u ON t.user_id = u.id;
