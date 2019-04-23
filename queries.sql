@@ -1,7 +1,7 @@
 INSERT INTO users
-SET email = 'rick@gmail.com', password = 'myspew', name = 'Rick', datetime_add = NOW();
+SET email = 'rick@gmail.com', password = 'myspew', name = 'Rick';
 INSERT INTO users
-SET email = 'morty@gmail.com', password = 'ammieforever', name = 'Morty', datetime_add = NOW();
+SET email = 'morty@gmail.com', password = 'ammieforever', name = 'Morty';
 
 INSERT INTO projects (name, user_id)
 VALUES ('Входящие', 1), ('Учеба', 2), ('Работа', 1), ('Домашние дела', 1), ('Авто', 2);
@@ -19,10 +19,10 @@ INSERT INTO tasks
 SET name = 'Встерча с другом', datetime_add = '2018-12-12', deadline = '2018-12-22', user_id = 2, project_id = 1;
 
 INSERT INTO tasks
-SET name = 'Купить корм для кота', datetime_add = NOW(), user_id = 1, project_id = 4;
+SET name = 'Купить корм для кота', user_id = 1, project_id = 4;
 
 INSERT INTO tasks
-SET name = 'Заказать пиццу', datetime_add = NOW(), user_id = 1, project_id = 4;
+SET name = 'Заказать пиццу', user_id = 1, project_id = 4;
 
 /* получить список из всех проектов для одного пользователя. Объедините проекты с задачами, чтобы посчитать количество задач в каждом проекте и в дальнейшем выводить эту цифру рядом с именем проекта*/
 SELECT p.NAME AS project, COUNT(t.id) tasks_total FROM projects p
@@ -31,12 +31,12 @@ GROUP BY p.name ORDER BY tasks_total DESC;
 
 
 /* получить список из всех задач для одного проекта */
-SELECT t.NAME, p.ID AS project_id FROM tasks t
+SELECT t.* FROM tasks t
 INNER JOIN projects p ON t.project_id = p.id
 WHERE p.id = 3;
 
 /* пометить задачу как выполненную */
-UPDATE tasks SET status = 1 WHERE name = 'Встерча с другом';
+UPDATE tasks SET status = 1 WHERE id = 1;
 
 /* обновить название задачи по её идентификатору */
 UPDATE tasks SET name = 'Новая задача' WHERE id = 1;
