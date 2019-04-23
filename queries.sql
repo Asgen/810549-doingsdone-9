@@ -28,6 +28,16 @@ SET name = 'Заказать пиццу', datetime_add = NOW(), user_id = 1, pro
 SELECT * FROM projects WHERE user_id = 1;
 
 /* Объедините проекты с задачами, чтобы посчитать количество задач в каждом проекте и в дальнейшем выводить эту цифру рядом с именем проекта*/
-SELECT u.NAME, p.NAME, t.name FROM tasks t
+SELECT p.NAME, t.name, p.ID FROM tasks t
+INNER JOIN projects p ON t.project_id = p.id;
+
+/* получить список из всех задач для одного проекта */
+SELECT p.NAME, t.name, p.ID FROM tasks t
 INNER JOIN projects p ON t.project_id = p.id
-INNER JOIN users u ON t.user_id = u.id;
+WHERE p.id = 1;
+
+/* пометить задачу как выполненную */
+UPDATE tasks SET status = 1 WHERE name = 'Встерча с другом';
+
+/* обновить название задачи по её идентификатору */
+UPDATE tasks SET name = 'Новая задача' WHERE id = 1;
