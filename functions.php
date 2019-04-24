@@ -42,7 +42,7 @@ function include_template($name, array $data = []) {
 // Функция проверки времени для задания
 function is_important($date) {
 
-    if ($date === 'Нет') {
+    if ($date === NULL) {
         return false;
     }
 

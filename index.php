@@ -53,11 +53,55 @@ $tasks = [
 
 require_once('functions.php');
 
+// Подключение к MySQL
+require_once('config/db.php');
+
+// Соединение с БД
+$connection_resourse = mysqli_connect($db['host'], $db['user'], $db['password'], $db['database']);
+mysqli_set_charset($connection_resourse, "utf8");
+
+$tasks = [];
+$projects = [];
+$page_content = '';
+
+// Если ошибка соединения - показываем ее
+if (!$connection_resourse) {
+    $error = mysqli_connect_error();
+    $page_content = $error;
+}
+
+// При успешном соединении формируем запрос к БД
+else {
+    // Запрос на получение списк задач
+    $sql = 'SELECT `name` AS `task`, `deadline` AS `date`, `status` AS `done` FROM tasks';
+    $result = mysqli_query($connection_resourse, $sql);
+    
+    // Если ответ получен, преобразуем его в двумерный массив и подключаем шаблон стр.
+    if ($result) {
+        $tasks = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+        // Подключение шаблона
+        $page_content = include_template('index.php', [
+          'tasks' => $tasks,
+          'show_complete_tasks' => $show_complete_tasks
+        ]);
+    }
+
+    // Если запрос неудачен, то выводим ошибку
+    else {
+        $error = mysqli_connect_error();
+        $page_content = $error;
+    }
+
+    // Запрос на получение списка проектов
+    $sql = 'SELECT `name` AS `task`, `deadline` AS `date`, `status` AS `done` FROM projects';
+}
+
 // Подключение шаблона
-$page_content = include_template('index.php', [
+/*$page_content = include_template('index.php', [
   'tasks' => $tasks,
   'show_complete_tasks' => $show_complete_tasks
-]);
+]);*/
 
 // Поключение лэйаута с включением в него шаблона
 $layout_content = include_template('layout.php', [
