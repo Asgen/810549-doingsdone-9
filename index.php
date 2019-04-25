@@ -63,6 +63,7 @@ mysqli_set_charset($connection_resourse, "utf8");
 $tasks = [];
 $projects = [];
 $page_content = '';
+$layout_content = 'sdvc';
 
 // Если ошибка соединения - показываем ее
 if (!$connection_resourse) {
@@ -73,9 +74,9 @@ if (!$connection_resourse) {
 // При успешном соединении формируем запрос к БД
 else {
     // Запрос на получение списк задач
-    $sql = 'SELECT `name` AS `task`, `deadline` AS `date`, `status` AS `done` FROM tasks';
+    $sql = 'SELECT `name` AS `task`, `deadline` AS `date`, `status` AS `done`, `project_id` AS `category` FROM tasks';
     $result = mysqli_query($connection_resourse, $sql);
-    
+
     // Если ответ получен, преобразуем его в двумерный массив и подключаем шаблон стр.
     if ($result) {
         $tasks = mysqli_fetch_all($result, MYSQLI_ASSOC);
@@ -93,23 +94,30 @@ else {
         $page_content = $error;
     }
 
-    // Запрос на получение списка проектов
-    $sql = 'SELECT `name` AS `task`, `deadline` AS `date`, `status` AS `done` FROM projects';
+    // Запрос на получение списка проектов для конкретного пользователя
+    $sql = 'SELECT u.NAME AS `user`, p.NAME AS `category`, COUNT(t.id) `tasks_total` FROM `projects` AS `p` LEFT JOIN `tasks` AS `t` ON p.id = t.project_id JOIN `users` AS `u` ON p.user_id = u.id WHERE p.user_id = 2 GROUP BY p.name';
+    $result = mysqli_query($connection_resourse, $sql);
+
+    // Если ответ получен, преобразуем его в двумерный массив и подключаем шаблон стр.
+    if ($result) {
+        $projects = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+        // Поключение лэйаута с включением в него шаблона
+        $layout_content = include_template('layout.php', [
+            'projects' => $projects,
+            'tasks' => $tasks,
+            'content' => $page_content,
+            'page_title' => 'Hello '.$projects[0]['user'],
+            'user_name' => $projects[0]['user']
+        ]);
+    }
+
+    // Если запрос неудачен, то выводим ошибку
+    else {
+        $error = mysqli_connect_error();
+        $layout_content = 'sfghbsfghsfrgh';
+    }
+
 }
-
-// Подключение шаблона
-/*$page_content = include_template('index.php', [
-  'tasks' => $tasks,
-  'show_complete_tasks' => $show_complete_tasks
-]);*/
-
-// Поключение лэйаута с включением в него шаблона
-$layout_content = include_template('layout.php', [
-    'projects' => $projects,
-    'tasks' => $tasks,
-    'content' => $page_content,
-    'page_title' => 'Hello',
-    'user_name' => 'Zeppelin'
-]);
 
 print($layout_content);
