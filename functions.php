@@ -1,16 +1,4 @@
 <?php
-// Функция подсчета задач
-function count_tasks($tasks_arr, $project_name) {
-  $count = 0;
-  foreach ($tasks_arr as $value) {
-    if ($value['category'] == $project_name) {
-      $count++;
-    }
-  }
-
-  return $count;
-}
-
 // Функция убирает опысные символы из строки
 function esc($str) {
   return htmlspecialchars($str, ENT_QUOTES);
@@ -42,7 +30,7 @@ function include_template($name, array $data = []) {
 // Функция проверки времени для задания
 function is_important($date) {
 
-    if ($date === 'Нет') {
+    if ($date === NULL) {
         return false;
     }
 

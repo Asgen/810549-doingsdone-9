@@ -25,9 +25,9 @@ INSERT INTO tasks
 SET name = 'Заказать пиццу', user_id = 1, project_id = 4;
 
 /* получить список из всех проектов для одного пользователя. Объедините проекты с задачами, чтобы посчитать количество задач в каждом проекте и в дальнейшем выводить эту цифру рядом с именем проекта*/
-SELECT p.NAME AS project, COUNT(t.id) tasks_total FROM projects AS p
-JOIN tasks t ON p.id = t.project_id AND p.user_id = 1
-GROUP BY p.name ORDER BY tasks_total DESC;
+SELECT p.NAME AS category, COUNT(t.id) AS tasks_total FROM projects AS p
+JOIN tasks AS t ON p.id = t.project_id WHERE p.user_id = 1
+GROUP BY p.name;
 
 
 /* получить список из всех задач для одного проекта */
