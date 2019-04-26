@@ -31,7 +31,7 @@ $result = mysqli_query($connection_resourse, $sql);
 
 // Если запрос неудачен, то выводим ошибку
 if (!$result) {
-    print("Ошибка подключения к БД " . mysqli_connect_error());
+    print("Ошибка в запросе к БД " . mysqli_error($connection_resourse));
     die();
 }
 
@@ -52,7 +52,7 @@ $result = mysqli_query($connection_resourse, $sql);
 
 // Если запрос неудачен, то выводим ошибку
 if (!$result) {
-    print("Ошибка подключения к БД " . mysqli_connect_error());
+    print("Ошибка в запросе к БД " . mysqli_error($connection_resourse));
     die();
 }
 
