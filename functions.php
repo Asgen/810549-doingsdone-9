@@ -1,16 +1,4 @@
 <?php
-// Функция подсчета задач
-function count_tasks($tasks_arr, $project_name) {
-  $count = 0;
-  foreach ($tasks_arr as $value) {
-    if ($value['category'] == $project_name) {
-      $count++;
-    }
-  }
-
-  return $count;
-}
-
 // Функция убирает опысные символы из строки
 function esc($str) {
   return htmlspecialchars($str, ENT_QUOTES);
