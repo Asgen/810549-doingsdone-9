@@ -26,16 +26,12 @@ $choose_project;
 
 // При успешном соединении формируем запрос к БД
 
-// Проверяем выбран ли проект
-if(isset($_GET['project_id'])) {
-  $choose_project = $_GET['project_id'];
-}
-
 // Запрос на получение списк задач
 $sql = "SELECT `name` AS `task`, `deadline` AS `date`, `status` AS `done`, `project_id` AS `category` FROM tasks";
 
 // Проверяем выбран ли проект
 if(isset($_GET['project_id'])) {
+  $choose_project = esc($_GET['project_id']);
   $sql = "SELECT `name` AS `task`, `deadline` AS `date`, `status` AS `done`, `project_id` AS `category` FROM tasks WHERE `project_id` = $choose_project";
 }
 
@@ -57,7 +53,7 @@ $page_content = include_template('index.php', [
   'show_complete_tasks' => $show_complete_tasks
 ]);
 
-if (sizeof($tasks) < 1 || !$tasks) {
+if (count($tasks) < 1 || !$tasks) {
   print('HTTP/1.0 404 not found');
   die();
 };
