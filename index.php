@@ -22,7 +22,7 @@ $tasks = [];
 $projects = [];
 $page_content = '';
 $layout_content = '';
-$choose_project;
+$choose_project = '';
 
 // При успешном соединении формируем запрос к БД
 
@@ -32,10 +32,21 @@ $sql = "SELECT `name` AS `task`, `deadline` AS `date`, `status` AS `done`, `proj
 // Проверяем выбран ли проект
 if(isset($_GET['project_id'])) {
   $choose_project = esc($_GET['project_id']);
-  $sql = "SELECT `name` AS `task`, `deadline` AS `date`, `status` AS `done`, `project_id` AS `category` FROM tasks WHERE `project_id` = $choose_project";
+  $sql = $sql . " WHERE `project_id` = ?";
 }
 
-$result = mysqli_query($connection_resourse, $sql);
+// Подготавливаем шаблон запроса
+$stmt = mysqli_prepare($connection_resourse, $sql);
+
+// Привязываем к маркеру значение переменной $choose_project.
+if ($choose_project !== '') {
+  mysqli_stmt_bind_param($stmt, 'i', $choose_project);
+}
+
+// Выполняем подготовленный запрос.
+mysqli_stmt_execute($stmt);
+
+$result = mysqli_stmt_get_result($stmt);
 
 // Если запрос неудачен, то выводим ошибку
 if (!$result) {
@@ -45,7 +56,6 @@ if (!$result) {
 
 // Если ответ получен, преобразуем его в двумерный массив и подключаем шаблон стр.
 $tasks = mysqli_fetch_all($result, MYSQLI_ASSOC);
-
 
 // Подключение шаблона
 $page_content = include_template('index.php', [
