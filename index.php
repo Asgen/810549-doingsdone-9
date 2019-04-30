@@ -22,12 +22,31 @@ $tasks = [];
 $projects = [];
 $page_content = '';
 $layout_content = '';
+$choose_project = '';
 
 // При успешном соединении формируем запрос к БД
 
 // Запрос на получение списк задач
-$sql = 'SELECT `name` AS `task`, `deadline` AS `date`, `status` AS `done`, `project_id` AS `category` FROM tasks';
-$result = mysqli_query($connection_resourse, $sql);
+$sql = "SELECT `name` AS `task`, `deadline` AS `date`, `status` AS `done`, `project_id` AS `category` FROM tasks";
+
+// Проверяем выбран ли проект
+if(isset($_GET['project_id'])) {
+  $choose_project = esc($_GET['project_id']);
+  $sql = $sql . " WHERE `project_id` = ?";
+}
+
+// Подготавливаем шаблон запроса
+$stmt = mysqli_prepare($connection_resourse, $sql);
+
+// Привязываем к маркеру значение переменной $choose_project.
+if ($choose_project !== '') {
+  mysqli_stmt_bind_param($stmt, 'i', $choose_project);
+}
+
+// Выполняем подготовленный запрос.
+mysqli_stmt_execute($stmt);
+
+$result = mysqli_stmt_get_result($stmt);
 
 // Если запрос неудачен, то выводим ошибку
 if (!$result) {
@@ -44,10 +63,14 @@ $page_content = include_template('index.php', [
   'show_complete_tasks' => $show_complete_tasks
 ]);
 
+if (count($tasks) < 1 || !$tasks) {
+  print('HTTP/1.0 404 not found');
+  die();
+};
 
 
 // Запрос на получение списка проектов для конкретного пользователя
-$sql = 'SELECT p.NAME AS `category`, COUNT(t.id) `tasks_total` FROM `projects` AS `p` LEFT JOIN `tasks` AS `t` ON p.id = t.project_id WHERE p.user_id = 1 GROUP BY p.name';
+$sql = 'SELECT p.NAME AS `category`, COUNT(t.id) `tasks_total`, p.id AS `project_id` FROM `projects` AS `p` LEFT JOIN `tasks` AS `t` ON p.id = t.project_id WHERE p.user_id = 1 GROUP BY p.id';
 $result = mysqli_query($connection_resourse, $sql);
 
 // Если запрос неудачен, то выводим ошибку
@@ -64,6 +87,7 @@ $layout_content = include_template('layout.php', [
     'projects' => $projects,
     'tasks' => $tasks,
     'content' => $page_content,
+    'active_project' => $choose_project,
     'page_title' => 'Hello ',
     'user_name' => 'Nick Cave'
 ]);

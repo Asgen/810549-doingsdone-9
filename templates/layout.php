@@ -39,8 +39,8 @@
         <nav class="main-navigation">
           <ul class="main-navigation__list">
             <?php foreach ($projects as $value) : ?>
-              <li class="main-navigation__list-item">
-                <a class="main-navigation__list-item-link" href="#">
+              <li class="main-navigation__list-item <?= $value['project_id'] === $active_project ? ' main-navigation__list-item--active' : '' ?>">
+                <a class="main-navigation__list-item-link" href=<?= 'index.php?project_id=' . $value['project_id'] ?>>
                   <?= esc($value['category']) ?>
                 </a>
                 <span class="main-navigation__list-item-count"><?= $value['tasks_total'] ?></span>
