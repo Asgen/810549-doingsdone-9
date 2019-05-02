@@ -22,25 +22,25 @@ $tasks = [];
 $projects = [];
 $page_content = '';
 $layout_content = '';
-$choose_project = '';
+$choosen_project = '';
 
 // При успешном соединении формируем запрос к БД
 
 // Запрос на получение списк задач
-$sql = "SELECT `name` AS `task`, `deadline` AS `date`, `status` AS `done`, `project_id` AS `category` FROM tasks";
+$sql = "SELECT `name` AS `task`, `deadline` AS `date`, `status` AS `done`, `project_id` AS `category`, file FROM tasks ORDER BY datetime_add DESC";
 
 // Проверяем выбран ли проект
 if(isset($_GET['project_id'])) {
-  $choose_project = esc($_GET['project_id']);
+  $choosen_project = esc($_GET['project_id']);
   $sql = $sql . " WHERE `project_id` = ?";
 }
 
 // Подготавливаем шаблон запроса
 $stmt = mysqli_prepare($connection_resourse, $sql);
 
-// Привязываем к маркеру значение переменной $choose_project.
-if ($choose_project !== '') {
-  mysqli_stmt_bind_param($stmt, 'i', $choose_project);
+// Привязываем к маркеру значение переменной $choosen_project.
+if ($choosen_project !== '') {
+  mysqli_stmt_bind_param($stmt, 'i', $choosen_project);
 }
 
 // Выполняем подготовленный запрос.
@@ -87,7 +87,7 @@ $layout_content = include_template('layout.php', [
     'projects' => $projects,
     'tasks' => $tasks,
     'content' => $page_content,
-    'active_project' => $choose_project,
+    'active_project' => $choosen_project,
     'page_title' => 'Hello ',
     'user_name' => 'Nick Cave'
 ]);
