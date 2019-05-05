@@ -41,3 +41,40 @@ function is_important($date) {
 
 return $hours_to_deadline <= 24;
 }
+
+// Функция обработки ответа обращения к БД
+function parse_result ($result, $connection_resourse) {
+
+    // Если запрос неудачен, то выводим ошибку
+    if (!$result) {
+        print("Ошибка в запросе к БД. Запрос $sql " . mysqli_error($connection_resourse));
+        die();
+    }
+
+    // Если ответ получен, преобразуем его в двумерный массив
+    return mysqli_fetch_all($result, MYSQLI_ASSOC);
+}
+
+// Установка соединения с БД
+function connect_Db () {
+    require_once('config/db.php');
+
+    $connection_resourse = mysqli_connect($db['host'], $db['user'], $db['password'], $db['database']);
+
+    // Если ошибка соединения - показываем ее
+    if (!$connection_resourse) {
+        print("Ошибка подключения к БД " . mysqli_connect_error());
+        die();
+    }
+
+    mysqli_set_charset($connection_resourse, "utf8");
+    return $connection_resourse;
+}
+function get_projects ($connection_resourse, $user_id) {
+
+    // Запрос на получение списка проектов для конкретного пользователя
+    $sql = "SELECT p.NAME AS `category`, COUNT(t.id) `tasks_total`, p.id AS `project_id` FROM `projects` AS `p` LEFT JOIN `tasks` AS `t` ON p.id = t.project_id WHERE p.user_id = $user_id GROUP BY p.id";
+    $result = mysqli_query($connection_resourse, $sql);
+
+    return parse_result($result, $connection_resourse);
+}
