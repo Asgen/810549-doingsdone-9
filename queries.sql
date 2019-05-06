@@ -1,3 +1,5 @@
+USE doingsdone;
+
 INSERT INTO users
 SET email = 'rick@gmail.com', password = 'myspew', name = 'Rick';
 INSERT INTO users
