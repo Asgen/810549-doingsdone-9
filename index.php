@@ -4,7 +4,7 @@ $show_complete_tasks = rand(0, 1);
 
 require_once('functions.php');
 
-$connection_resourse = connect_Db();
+$connection_resourse = connect_db();
 
 $tasks = [];
 $projects = [];

@@ -56,7 +56,7 @@ function parse_result ($result, $connection_resourse) {
 }
 
 // Установка соединения с БД
-function connect_Db () {
+function connect_db () {
     require_once('config/db.php');
 
     $connection_resourse = mysqli_connect($db['host'], $db['user'], $db['password'], $db['database']);

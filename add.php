@@ -1,14 +1,23 @@
 <?php
 
+ini_set('error_reporting', E_ALL);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+
 require_once('functions.php');
 require_once('helpers.php');
 
 // Соединение с БД
-$connection_resourse = connect_Db();
+$connection_resourse = connect_db();
 $projects = [];
 
 // Запрос на получение списка проектов для конкретного пользователя
 $projects = get_projects($connection_resourse, 1);
+
+// Подключение шаблона
+$page_content = include_template('add.php', [
+  	'projects' => $projects
+]);
 
 // Если сценарий был вызван отправкой формы
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -57,14 +66,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		// Привязываем к маркеру значение переменных.
 		$name = $task['name'];
 		$project_id = $task['project'];
-		
-		mysqli_stmt_bind_param($stmt, 'sss', $name, $project_id, $file);
 
 		if ($task['date']) {
 			$sql .= ", deadline = ?";
 			$stmt = mysqli_prepare($connection_resourse, $sql);
 			$deadline = $task['date'];
 			mysqli_stmt_bind_param($stmt, 'ssss', $name, $project_id, $file, $deadline);
+		}
+
+		else {
+			mysqli_stmt_bind_param($stmt, 'sss', $name, $project_id, $file);
 		}	  	
 
 		// Выполняем подготовленный запрос.
@@ -79,20 +90,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		header("Location: /");
 	}
 
-}
+	// Подключение шаблона с ошибками
+	$page_content = include_template('add.php', [
+	  	'projects' => $projects,
+		'task' => $task,
+		'errors' => $errors
+	]);
 
-// Подключение шаблона
-$page_content = include_template('add.php', [
-  	'projects' => $projects,
-	'task' => $task,
-	'errors' => $errors
-]);
+}
 
 // Поключение лэйаута с включением в него шаблона
 $layout_content = include_template('layout.php', [
     'projects' => $projects,
     'content' => $page_content,
-    'active_project' => $choosen_project,
+    'active_project' => $choosen_project ?? '',
     'page_title' => 'Hello ',
     'user_name' => 'Nick Cave'
 ]);
