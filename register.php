@@ -1,5 +1,7 @@
 <?php
-
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+ini_set('error_reporting', E_ALL);
 require_once('functions.php');
 require_once('helpers.php');
 
@@ -36,6 +38,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $sql = "SELECT id FROM users WHERE email = '$email'";
         $res = mysqli_query($connection_resourse, $sql);
 
+        parse_result($res, $connection_resourse, $sql);
+
          if (mysqli_num_rows($res) > 0) {
             $errors['email'] = 'Пользователь с этим email уже зарегистрирован';
         }
@@ -50,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		 $password = password_hash($form['password'], PASSWORD_DEFAULT);
 
 		// Формируем запрос
-		$sql = 'INSERT INTO users (datetime_add, email, name, password) VALUES (NOW(), ?, ?, ?)';
+		$sql = 'INSERT INTO users (email, name, password) VALUES (?, ?, ?)';
 		
 		// Подготавливаем шаблон запроса
 		$stmt = db_get_prepare_stmt($connection_resourse, $sql, [$email, $form['name'], $password]);	  	
@@ -65,13 +69,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		}
 	}
 
+	// Подключение шаблона
+	$page_content = include_template('register.php', [
+		'form' => $form,
+		'errors' => $errors
+	]);
 }
 
-// Подключение шаблона
-$page_content = include_template('register.php', [
-	'form' => $form,
-	'errors' => $errors
-]);
+else {
+	// Подключение шаблона
+	$page_content = include_template('register.php', []);
+}
 
 // Поключение лэйаута
 $layout_content = include_template('layout.php', [
@@ -80,5 +88,3 @@ $layout_content = include_template('layout.php', [
 ]);
 
 print($layout_content);
-
-?>

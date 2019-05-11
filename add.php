@@ -14,10 +14,6 @@ $projects = [];
 // Запрос на получение списка проектов для конкретного пользователя
 $projects = get_projects($connection_resourse, 1);
 
-// Подключение шаблона
-$page_content = include_template('add.php', [
-  	'projects' => $projects
-]);
 
 // Если сценарий был вызван отправкой формы
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -49,7 +45,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	}
 
 	// Выбран существующий ли проект
-	if (array_search($task['project'], $projects)) {
+	$wrong_proj = true;
+	foreach ($projects as $value) {
+		if ($value['project_id'] === $task['project']) {
+			$wrong_proj = false;
+		}
+	}
+	if ($wrong_proj) {
 		$errors['project'] = 'Выберите существующий проект';
 	}
 
@@ -97,6 +99,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		'errors' => $errors
 	]);
 
+}
+
+else {
+	// Подключение шаблона
+	$page_content = include_template('add.php', [
+	  	'projects' => $projects
+	]);
 }
 
 // Поключение лэйаута с включением в него шаблона

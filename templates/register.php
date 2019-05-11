@@ -5,7 +5,7 @@
     <div class="form__row">
       <label class="form__label" for="email">E-mail <sup>*</sup></label>
 
-      <input class="form__input <?= $errors['email'] ? 'form__input--error' : '' ?>" type="text" name="email" id="email" value="<?= $form['email'] ?>" placeholder="Введите e-mail">
+      <input class="form__input <?= isset($errors['email']) ? 'form__input--error' : '' ?>" type="text" name="email" id="email" value="<?= esc($form['email'] ?? '') ?>" placeholder="Введите e-mail">
       
       <?php if (isset($errors['email'])) : ?>
         <p class='form__message'><?= $errors['email'] ?></p>
@@ -25,7 +25,7 @@
     <div class="form__row">
       <label class="form__label" for="name">Имя <sup>*</sup></label>
 
-      <input class="form__input <?= $errors['name'] ? 'form__input--error' : '' ?>" type="text" name="name" id="name" value="<?= $form['name'] ?>" placeholder="Введите пароль">
+      <input class="form__input <?= isset($errors['name']) ? 'form__input--error' : '' ?>" type="text" name="name" id="name" value="<?= esc($form['name'] ?? '') ?>" placeholder="Введите имя">
 
       <?php if (isset($errors['name'])) : ?>
         <p class='form__message'><?= $errors['name'] ?></p>
@@ -33,7 +33,7 @@
     </div>
 
     <div class="form__row form__row--controls">
-      <?php if (count($errors)) : ?>
+      <?php if (isset($errors) && count($errors)) : ?>
         <p class="error-message">Пожалуйста, исправьте ошибки в форме</p>
       <?php endif ?>
 

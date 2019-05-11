@@ -35,7 +35,7 @@ if ($choosen_project) {
 mysqli_stmt_execute($stmt);
 $result = mysqli_stmt_get_result($stmt);
 
-$tasks = parse_result($result, $connection_resourse);
+$tasks = parse_result($result, $connection_resourse, $sql);
 
 if (count($tasks) < 1 ) {
   print('HTTP/1.0 404 not found');
