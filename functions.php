@@ -43,7 +43,7 @@ return $hours_to_deadline <= 24;
 }
 
 // Функция обработки ответа обращения к БД
-function parse_result ($result, $connection_resourse) {
+function parse_result ($result, $connection_resourse, $sql) {
 
     // Если запрос неудачен, то выводим ошибку
     if (!$result) {
@@ -56,7 +56,7 @@ function parse_result ($result, $connection_resourse) {
 }
 
 // Установка соединения с БД
-function connect_Db () {
+function connect_db () {
     require_once('config/db.php');
 
     $connection_resourse = mysqli_connect($db['host'], $db['user'], $db['password'], $db['database']);
@@ -70,11 +70,12 @@ function connect_Db () {
     mysqli_set_charset($connection_resourse, "utf8");
     return $connection_resourse;
 }
+
 function get_projects ($connection_resourse, $user_id) {
 
     // Запрос на получение списка проектов для конкретного пользователя
     $sql = "SELECT p.NAME AS `category`, COUNT(t.id) `tasks_total`, p.id AS `project_id` FROM `projects` AS `p` LEFT JOIN `tasks` AS `t` ON p.id = t.project_id WHERE p.user_id = $user_id GROUP BY p.id";
     $result = mysqli_query($connection_resourse, $sql);
 
-    return parse_result($result, $connection_resourse);
+    return parse_result($result, $connection_resourse, $sql);
 }

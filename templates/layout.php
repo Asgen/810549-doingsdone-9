@@ -1,3 +1,9 @@
+<?php
+ini_set('error_reporting', E_ALL);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+?>
+
 <!DOCTYPE html>
 <html lang="ru">
 
@@ -33,25 +39,36 @@
     </header>
 
     <div class="content">
-      <section class="content__side">
-        <h2 class="content__side-heading">Проекты</h2>
 
-        <nav class="main-navigation">
-          <ul class="main-navigation__list">
-            <?php foreach ($projects as $value) : ?>
-              <li class="main-navigation__list-item <?= $value['project_id'] === $active_project ? ' main-navigation__list-item--active' : '' ?>">
-                <a class="main-navigation__list-item-link" href=<?= 'index.php?project_id=' . $value['project_id'] ?>>
-                  <?= esc($value['category']) ?>
-                </a>
-                <span class="main-navigation__list-item-count"><?= $value['tasks_total'] ?></span>
-              </li>
-            <?php endforeach; ?>
-          </ul>
-        </nav>
+      <?php //if (isset($_SESSION['user_id'])): ?>
+        <section class="content__side">
+          <h2 class="content__side-heading">Проекты</h2>
+          <nav class="main-navigation">
+            <ul class="main-navigation__list">
+              <?php if (isset($projects)) : ?>
+                <?php foreach ($projects as $value) : ?>
+                  <li class="main-navigation__list-item <?= $value['project_id'] === $active_project ? ' main-navigation__list-item--active' : '' ?>">
+                    <a class="main-navigation__list-item-link" href=<?= 'index.php?project_id=' . $value['project_id'] ?>>
+                      <?= esc($value['category']) ?>
+                    </a>
+                    <span class="main-navigation__list-item-count"><?= $value['tasks_total'] ?></span>
+                  </li>
+                <?php endforeach; ?>
+              <?php endif; ?>
+            </ul>
+          </nav>
+          <a class="button button--transparent button--plus content__side-button"
+             href="pages/form-project.html" target="project_add">Добавить проект</a>
+        </section>
+        <?php //else : ?>
+          <!--<section class="content__side">
+            <p class="content__side-info">Если у вас уже есть аккаунт, авторизуйтесь на сайте</p>
 
-        <a class="button button--transparent button--plus content__side-button"
-           href="pages/form-project.html" target="project_add">Добавить проект</a>
-      </section>
+            <a class="button button--transparent content__side-button" href="form-authorization.html">Войти</a>
+          </section>-->
+      <?php //endif; ?>
+
+
 
       <main class="content__main">
         <?= $content ?>

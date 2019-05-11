@@ -4,7 +4,7 @@ $show_complete_tasks = rand(0, 1);
 
 require_once('functions.php');
 
-$connection_resourse = connect_Db();
+$connection_resourse = connect_db();
 
 $tasks = [];
 $projects = [];
@@ -35,7 +35,7 @@ if ($choosen_project) {
 mysqli_stmt_execute($stmt);
 $result = mysqli_stmt_get_result($stmt);
 
-$tasks = parse_result($result, $connection_resourse);
+$tasks = parse_result($result, $connection_resourse, $sql);
 
 if (count($tasks) < 1 ) {
   print('HTTP/1.0 404 not found');
