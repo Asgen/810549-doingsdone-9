@@ -72,9 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	// Подключение шаблона
 	$page_content = include_template('register.php', [
 		'form' => $form,
-		'errors' => $errors,
-		'page_title' => 'Hello ',
-    	'user_name' => 'Nick Cave'
+		'errors' => $errors
 	]);
 }
 
