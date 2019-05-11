@@ -69,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		$name = $task['name'];
 		$project_id = $task['project'];
 
-		if ($task['date']) {
+		if (isset($task['date'])) {
 			$sql .= ", deadline = ?";
 			$stmt = mysqli_prepare($connection_resourse, $sql);
 			$deadline = $task['date'];
