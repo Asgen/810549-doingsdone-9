@@ -72,7 +72,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	// Подключение шаблона
 	$page_content = include_template('register.php', [
 		'form' => $form,
-		'errors' => $errors
+		'errors' => $errors,
+		'page_title' => 'Hello ',
+    	'user_name' => 'Nick Cave'
 	]);
 }
 
@@ -84,6 +86,7 @@ else {
 // Поключение лэйаута
 $layout_content = include_template('layout.php', [
 	'content' => $page_content,
+	'page_title' => 'Hello ',
 	'user_name' => 'Мистер Твикс'
 ]);
 
