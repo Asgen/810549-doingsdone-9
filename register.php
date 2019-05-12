@@ -66,6 +66,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		if ($result && empty($errors)) {
 		    header("Location: /");
             exit();
+		} else {
+			print("Ошибка подключения к БД " . mysqli_connect_error());
+        	die();
 		}
 	}
 

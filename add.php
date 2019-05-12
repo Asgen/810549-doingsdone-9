@@ -49,6 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	foreach ($projects as $value) {
 		if ($value['project_id'] === $task['project']) {
 			$wrong_proj = false;
+			break();
 		}
 	}
 	if ($wrong_proj) {
