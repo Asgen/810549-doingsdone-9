@@ -55,9 +55,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 		// Формируем запрос
 		$sql = 'INSERT INTO users (email, name, password) VALUES (?, ?, ?)';
-		
+
 		// Подготавливаем шаблон запроса
-		$stmt = db_get_prepare_stmt($connection_resourse, $sql, [$email, $form['name'], $password]);	  	
+		$stmt = db_get_prepare_stmt($connection_resourse, $sql, [$email, $form['name'], $password]);
 
 		// Выполняем подготовленный запрос.
 		$result = mysqli_stmt_execute($stmt);
@@ -66,6 +66,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		if ($result && empty($errors)) {
 		    header("Location: /");
             exit();
+		} else {
+			print("Ошибка подключения к БД " . mysqli_connect_error());
+        	die();
 		}
 	}
 
@@ -74,9 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		'form' => $form,
 		'errors' => $errors
 	]);
-}
-
-else {
+} else {
 	// Подключение шаблона
 	$page_content = include_template('register.php', []);
 }

@@ -49,6 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	foreach ($projects as $value) {
 		if ($value['project_id'] === $task['project']) {
 			$wrong_proj = false;
+			break;
 		}
 	}
 	if ($wrong_proj) {
@@ -61,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		// Записываем в БД
 		// Формируем запрос
 		$sql = "INSERT INTO tasks SET name = ?, project_id = ?, user_id = 1, file = ?";
-		
+
 		// Подготавливаем шаблон запроса
 		$stmt = mysqli_prepare($connection_resourse, $sql);
 
@@ -74,11 +75,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 			$stmt = mysqli_prepare($connection_resourse, $sql);
 			$deadline = $task['date'];
 			mysqli_stmt_bind_param($stmt, 'ssss', $name, $project_id, $file, $deadline);
-		}
-
-		else {
+		} else {
 			mysqli_stmt_bind_param($stmt, 'sss', $name, $project_id, $file);
-		}	  	
+		}
 
 		// Выполняем подготовленный запрос.
 		$result = mysqli_stmt_execute($stmt);
@@ -99,9 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		'errors' => $errors
 	]);
 
-}
-
-else {
+} else {
 	// Подключение шаблона
 	$page_content = include_template('add.php', [
 	  	'projects' => $projects
