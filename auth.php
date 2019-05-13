@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 ini_set('error_reporting', E_ALL);
 ini_set('display_errors', 1);
@@ -30,18 +30,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	$sql = "SELECT * FROM users WHERE email = '$email'";
 	$res = mysqli_query($connection_resourse, $sql);
 
+     // Если запрос неудачен, то выводим ошибку
+    if (!$res) {
+        print("Ошибка в запросе к БД. Запрос $sql " . mysqli_error($connection_resourse));
+        die();
+    }
+
 	$user = $res ? mysqli_fetch_array($res, MYSQLI_ASSOC) : null;
 
 	if (!count($errors) and $user) {
 		// Сравниваем хеши паролей и если совпадают то записываем в сессию
 		if (password_verify($form['password'], $user['password'])) {
 			$_SESSION['user'] = $user;
-		}
-		else {
+		} else {
 			$errors['password'] = 'Неверный пароль';
 		}
-	}
-	else {
+	} else {
 		$errors['email'] = 'Такой пользователь не найден';
 	}
 
@@ -55,21 +59,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 			'content' => $page_content,
 			'page_title' => 'Авторизация'
 		]);
-	}
-
-	else {
+	} else {
 		header("Location: /index.php");
 		exit();
 	}
-}
-
-else {
+} else {
 
 	if (isset($_SESSION['user'])) {
         header("Location: /index.php");
 		exit();
-    }
-    else {
+    } else {
         $page_content = include_template('auth.php', []);
     }
 

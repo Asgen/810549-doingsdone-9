@@ -8,9 +8,6 @@ session_start();
 
 if (isset($_SESSION['user'])) {
   $connection_resourse = connect_db();
-
-  $tasks = [];
-  $projects = [];
   $choosen_project = 0;
 
   // При успешном соединении формируем запрос к БД
@@ -58,9 +55,7 @@ if (isset($_SESSION['user'])) {
       'page_title' => 'Hello ',
       'user' => $_SESSION['user']
   ]);
-}
-
-else {
+} else {
   // Подключение шаблона
   $page_content = include_template('guest.php', [
   ]);
