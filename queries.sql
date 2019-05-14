@@ -33,7 +33,7 @@ GROUP BY p.name;
 
 
 /* получить список из всех задач для одного проекта */
-SELECT t.* FROM tasks AS t
+SELECT * FROM tasks AS t
 INNER JOIN projects p ON t.project_id = p.id
 WHERE p.id = 3;
 

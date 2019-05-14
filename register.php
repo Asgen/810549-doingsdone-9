@@ -62,13 +62,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		// Выполняем подготовленный запрос.
 		$result = mysqli_stmt_execute($stmt);
 
+		if (!$result) {
+			print("Ошибка подключения к БД " . mysqli_connect_error());
+        	die();
+		}
+
 		// Редирект на страницу входа, если пользователь был успешно добавлен в БД.
 		if ($result && empty($errors)) {
 		    header("Location: /");
             exit();
-		} else {
-			print("Ошибка подключения к БД " . mysqli_connect_error());
-        	die();
 		}
 	}
 

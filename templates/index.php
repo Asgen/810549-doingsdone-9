@@ -8,10 +8,10 @@
 
 <div class="tasks-controls">
   <nav class="tasks-switch">
-    <a href="/" class="tasks-switch__item tasks-switch__item--active">Все задачи</a>
-    <a href="/" class="tasks-switch__item">Повестка дня</a>
-    <a href="/" class="tasks-switch__item">Завтра</a>
-    <a href="/" class="tasks-switch__item">Просроченные</a>
+    <a href="/index.php?filter=show_all" class="tasks-switch__item tasks-switch__item--active">Все задачи</a>
+    <a href="/index.php?filter=today" class="tasks-switch__item">Повестка дня</a>
+    <a href="/index.php?filter=tomorrow" class="tasks-switch__item">Завтра</a>
+    <a href="/index.php?filter=out_of_date" class="tasks-switch__item">Просроченные</a>
   </nav>
 
   <label class="checkbox">
@@ -32,7 +32,7 @@
         ">
           <td class="task__select">
             <label class="checkbox task__checkbox">
-              <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" value="1">
+              <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" value="<?= esc($value['id']) ?>">
               <span class="checkbox__text"><?= esc($value['task']) ?></span>
             </label>
           </td>
