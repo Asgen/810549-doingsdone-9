@@ -8,10 +8,10 @@
 
 <div class="tasks-controls">
   <nav class="tasks-switch">
-    <a href="/index.php?filter=show_all" class="tasks-switch__item <?= $_GET['filter'] === 'show_all' ? ' tasks-switch__item--active' : '' ?>">Все задачи</a>
-    <a href="/index.php?filter=today" class="tasks-switch__item <?= $_GET['filter'] === 'today' ? ' tasks-switch__item--active' : '' ?>">Повестка дня</a>
-    <a href="/index.php?filter=tomorrow" class="tasks-switch__item <?= $_GET['filter'] === 'tomorrow' ? ' tasks-switch__item--active' : '' ?>">Завтра</a>
-    <a href="/index.php?filter=out_of_date" class="tasks-switch__item <?= $_GET['filter'] === 'out_of_date' ? ' tasks-switch__item--active' : '' ?>">Просроченные</a>
+    <a href="/index.php?filter=show_all" class="tasks-switch__item <?= isset($_GET['filter']) && $_GET['filter'] === 'show_all' ? ' tasks-switch__item--active' : '' ?>">Все задачи</a>
+    <a href="/index.php?filter=today" class="tasks-switch__item <?= isset($_GET['filter']) && $_GET['filter'] === 'today' ? ' tasks-switch__item--active' : '' ?>">Повестка дня</a>
+    <a href="/index.php?filter=tomorrow" class="tasks-switch__item <?= isset($_GET['filter']) && $_GET['filter'] === 'tomorrow' ? ' tasks-switch__item--active' : '' ?>">Завтра</a>
+    <a href="/index.php?filter=out_of_date" class="tasks-switch__item <?= isset($_GET['filter']) && $_GET['filter'] === 'out_of_date' ? ' tasks-switch__item--active' : '' ?>">Просроченные</a>
   </nav>
 
   <label class="checkbox">
