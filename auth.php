@@ -61,13 +61,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		]);
 	} else {
 		header("Location: /index.php");
-		exit();
+		die();
 	}
 } else {
 
 	if (isset($_SESSION['user'])) {
         header("Location: /index.php");
-		exit();
+		die();
     } else {
         $page_content = include_template('auth.php', []);
     }

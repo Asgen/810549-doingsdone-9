@@ -43,12 +43,16 @@ return $hours_to_deadline <= 24;
 }
 
 // Функция обработки ответа обращения к БД
-function parse_result ($result, $connection_resourse, $sql) {
+function parse_result ($result, $connection_resourse, $sql, $fetch = false) {
 
     // Если запрос неудачен, то выводим ошибку
     if (!$result) {
         print("Ошибка в запросе к БД. Запрос $sql " . mysqli_error($connection_resourse));
         die();
+    }
+
+    if ($fetch) {
+        return mysqli_fetch_assoc($result);
     }
 
     // Если ответ получен, преобразуем его в двумерный массив

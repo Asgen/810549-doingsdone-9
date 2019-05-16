@@ -72,7 +72,7 @@ ini_set('display_startup_errors', 1);
             </ul>
           </nav>
           <a class="button button--transparent button--plus content__side-button"
-             href="pages/form-project.html" target="project_add">Добавить проект</a>
+             href="add_project.php">Добавить проект</a>
         </section>
         <?php else : ?>
           <section class="content__side">
