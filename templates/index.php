@@ -8,10 +8,10 @@
 
 <div class="tasks-controls">
   <nav class="tasks-switch">
-    <a href="/index.php?filter=show_all" class="tasks-switch__item tasks-switch__item--active">Все задачи</a>
-    <a href="/index.php?filter=today" class="tasks-switch__item">Повестка дня</a>
-    <a href="/index.php?filter=tomorrow" class="tasks-switch__item">Завтра</a>
-    <a href="/index.php?filter=out_of_date" class="tasks-switch__item">Просроченные</a>
+    <a href="/index.php?filter=show_all" class="tasks-switch__item <?= $_GET['filter'] === 'show_all' ? ' tasks-switch__item--active' : '' ?>">Все задачи</a>
+    <a href="/index.php?filter=today" class="tasks-switch__item <?= $_GET['filter'] === 'today' ? ' tasks-switch__item--active' : '' ?>">Повестка дня</a>
+    <a href="/index.php?filter=tomorrow" class="tasks-switch__item <?= $_GET['filter'] === 'tomorrow' ? ' tasks-switch__item--active' : '' ?>">Завтра</a>
+    <a href="/index.php?filter=out_of_date" class="tasks-switch__item <?= $_GET['filter'] === 'out_of_date' ? ' tasks-switch__item--active' : '' ?>">Просроченные</a>
   </nav>
 
   <label class="checkbox">
@@ -22,13 +22,13 @@
 </div>
 
 <table class="tasks">
-  
+
   <?php if (isset($tasks)): ?>
     <?php foreach ($tasks as $value) :
       if ($value['done'] !== 1 || $show_complete_tasks) : ?>
         <tr class="tasks__item task
-          <?= $value['done'] === 1 ? 'task--completed' : '' ?>
-          <?= $value['done'] === 0 && is_important($value['date']) ? 'task--important' : '' ?>
+          <?= (int)$value['done'] === 1 ? 'task--completed' : '' ?>
+          <?= (int)$value['done'] === 0 && is_important($value['date']) ? 'task--important' : '' ?>
         ">
           <td class="task__select">
             <label class="checkbox task__checkbox">

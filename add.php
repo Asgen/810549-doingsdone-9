@@ -91,6 +91,7 @@ if (isset($_SESSION['user'])) {
 			}
 
 			header("Location: /");
+			die();
 		}
 
 		// Подключение шаблона с ошибками
@@ -119,4 +120,5 @@ if (isset($_SESSION['user'])) {
 	print($layout_content);
 } else {
 	header("Location: /");
+	die();
 }

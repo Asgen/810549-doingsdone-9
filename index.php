@@ -1,6 +1,4 @@
 <?php
-// показывать или нет выполненные задачи
-$show_complete_tasks = rand(0, 1);
 
 require_once('functions.php');
 
@@ -15,10 +13,10 @@ if (isset($_SESSION['user'])) {
   $u_id = $_SESSION['user']['id'];
 
   // Переключение состояния задачи
-  if ($_GET['task_id']) {
+  if (isset($_GET['task_id'])) {
 
     $task_id = $_GET['task_id'];
-    $sql = "SELECT id, name, status FROM tasks WHERE id = ?";
+    $sql = "SELECT id, name, status FROM tasks WHERE id = ? and user_id = $u_id";
 
     // Подготавливаем шаблон запроса
     $stmt = mysqli_prepare($connection_resourse, $sql);
@@ -30,26 +28,43 @@ if (isset($_SESSION['user'])) {
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
 
-    $task = parse_result($result, $connection_resourse, $sql);
+    $task = parse_result($result, $connection_resourse, $sql, true);
 
-    // Меняем статус задачи на противоположный 
-    if ($task[0]['status']) {
-      $task[0]['status'] = 0;
-    } else {
-      $task[0]['status'] = 1;
-    }
-    $status = $task[0]['status'];
-    $t_id = $task[0]['id'];
+    // Меняем статус задачи на противоположный
+    $status = $task['status'] ? 0 : 1;
+    $t_id = $task['id'];
 
     $sql = "UPDATE tasks SET status = $status WHERE id = $t_id";
     $res = mysqli_query($connection_resourse, $sql);
     if (!$res) {
       print("Ошибка в запросе к БД. Запрос $sql " . mysqli_error($connection_resourse));
-        die();
+      die();
     }
 
     header("Location: /");
+    die();
   }
+
+  // Показать выполенные
+
+  $show_completed_state = 'show_completed'; // Определимся как будет называться наша кука
+  $show_complete_tasks = 0; // Значение по умолчанию
+  $expire = strtotime("+30 days"); // Кука будет жить ровно 30 дней. Функция strtotime переводит дату в TIMESTAMP формат
+  $path = "/"; // Путь на сайте, по которому будет доступна кука. Слеш означает весь сайт
+
+  // Проверяем существование куки с этим именем. Если кука существует, то получаем её значение в переменную.
+  if (isset($_COOKIE['show_completed'])) {
+    $show_complete_tasks = $_COOKIE['show_completed'];
+  }
+
+  if (isset($_GET['show_completed'])) {
+    $state = $show_complete_tasks;
+    $show_complete_tasks = $state ? 0 : 1;
+  }
+
+  // Устанавливаем куку с помощью функции setcookie. Эта функция создаст новую куку, или обновит значение существующей.
+  setcookie($show_completed_state, $show_complete_tasks, $expire, $path);
+
 
   // Фильтрация
   if (isset($_GET['filter'])) {
@@ -73,8 +88,8 @@ if (isset($_SESSION['user'])) {
 
     $res = mysqli_query($connection_resourse, $sql);
     $tasks = parse_result($res, $connection_resourse, $sql);
-  
-  } else { 
+
+  } else {
 
     // Запрос на получение списк задач
     $sql = "SELECT id, `name` AS `task`, `deadline` AS `date`, `status` AS `done`, `project_id` AS `category`, file FROM tasks WHERE `user_id` = $u_id";

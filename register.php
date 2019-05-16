@@ -70,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		// Редирект на страницу входа, если пользователь был успешно добавлен в БД.
 		if ($result && empty($errors)) {
 		    header("Location: /");
-            exit();
+            die();
 		}
 	}
 
