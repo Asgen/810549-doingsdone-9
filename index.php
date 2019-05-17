@@ -94,7 +94,7 @@ if (isset($_SESSION['user'])) {
   } elseif (isset($_GET['search']) && !empty($_GET['search'])) {
 
     // Полнотекстовый поиск ------
-    $search = $_GET['search'];
+    $search = trim($_GET['search']);
     $sql = "SELECT id, `name` AS `task`, `deadline` AS `date`, `status` AS `done`, `project_id` AS `category`, file FROM tasks WHERE MATCH (name) AGAINST (?)";
 
     $stmt = db_get_prepare_stmt($connection_resourse, $sql, $data = [$search]);
