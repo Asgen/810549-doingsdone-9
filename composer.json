@@ -1,0 +1,15 @@
+{
+    "name": "henry/doingsdone",
+    "description": "web application for managing projects and tasks",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Asgen",
+            "email": "genuus1@gmail.com"
+        }
+    ],
+    "require": {
+        "swiftmailer/swiftmailer": "^6.2"
+    }
+}
