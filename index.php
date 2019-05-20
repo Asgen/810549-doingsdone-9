@@ -15,28 +15,15 @@ if (isset($_SESSION['user'])) {
   // Переключение состояния задачи ------
   if (isset($_GET['task_id'])) {
 
-    $task_id = $_GET['task_id'];
-    $sql = "SELECT id, name, status FROM tasks WHERE id = ? and user_id = $u_id";
+  $task_id = (int)$_GET['task_id']; 
+  $task_status = (int)$_GET['check']; 
+  //print($task_id); 
+  // Меняем статус задачи на противоположный 
+  //$status = $task_status ? 0 : 1; 
 
-    // Подготавливаем шаблон запроса
-    $stmt = mysqli_prepare($connection_resourse, $sql);
+  $sql = "UPDATE tasks SET status = $task_status WHERE id = $task_id"; 
+  $res = mysqli_query($connection_resourse, $sql); 
 
-    // Привязываем к маркеру значение переменной $task_id.
-    mysqli_stmt_bind_param($stmt, 'i', $task_id);
-
-    // Выполняем подготовленный запрос.
-    mysqli_stmt_execute($stmt);
-    $result = mysqli_stmt_get_result($stmt);
-
-    $task = parse_result($result, $connection_resourse, $sql, true);
-    mysqli_free_result($result);
-
-    // Меняем статус задачи на противоположный
-    $status = $task['status'] ? 0 : 1;
-    $t_id = $task['id'];
-
-    $sql = "UPDATE tasks SET status = $status WHERE id = $t_id";
-    $res = mysqli_query($connection_resourse, $sql);
     if (!$res) {
       print("Ошибка в запросе к БД. Запрос $sql " . mysqli_error($connection_resourse));
       die();

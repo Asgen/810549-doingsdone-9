@@ -71,24 +71,26 @@ foreach ($tasks_count as $key => $value) {
 
 }
 
-$sql_u_ids = '(' . implode(',', $single_task_users) .')';
-$sql = "SELECT u.name AS user, u.email, t.name AS task, t.deadline FROM tasks AS t 
-		JOIN users AS u ON u.id = t.user_id
-		WHERE t.status = 0 AND t.deadline = CURRENT_DATE() AND u.id IN" . $sql_u_ids;
+if (count($single_task_users)) {
+	$sql_u_ids = '(' . implode(',', $single_task_users) .')';
+	$sql = "SELECT u.name AS user, u.email, t.name AS task, t.deadline FROM tasks AS t 
+			JOIN users AS u ON u.id = t.user_id
+			WHERE t.status = 0 AND t.deadline = CURRENT_DATE() AND u.id IN" . $sql_u_ids;
 
-$res = mysqli_query($connection_resourse, $sql);
-$tasks = parse_result($res, $connection_resourse, $sql);
+	$res = mysqli_query($connection_resourse, $sql);
+	$tasks = parse_result($res, $connection_resourse, $sql);
 
-foreach ($tasks as $value) {
-	$message->setTo($value['email']);
-	$msg_content = "Уважаемый, " . $value['user'] . "! У вас запланирована задача " . $value['task'] . " на " . $value['deadline'];
-	$message->setBody($msg_content, 'text/plain');
+	foreach ($tasks as $value) {
+		$message->setTo($value['email']);
+		$msg_content = "Уважаемый, " . $value['user'] . "! У вас запланирована задача " . $value['task'] . " на " . $value['deadline'];
+		$message->setBody($msg_content, 'text/plain');
 
-	$result = $mailer->send($message);
+		$result = $mailer->send($message);
 
-	// Если результат не был успешным, то мы можем узнать подробности ошибки вызовом метода из объекта для журналирования
-	if (!$result) {
-	    print("Не удалось отправить рассылку: " . $logger->dump());
+		// Если результат не был успешным, то мы можем узнать подробности ошибки вызовом метода из объекта для журналирования
+		if (!$result) {
+		    print("Не удалось отправить рассылку: " . $logger->dump());
+		}
 	}
 }
 print("Рассылка успешно отправлена");
