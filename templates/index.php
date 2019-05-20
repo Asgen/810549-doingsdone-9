@@ -23,7 +23,7 @@
 
 <table class="tasks">
 
-  <?php if (isset($tasks) && count($tasks)): ?>
+  <?php if (isset($tasks)): ?>
     <?php foreach ($tasks as $value) :
       if ($value['done'] !== 1 || $show_complete_tasks) : ?>
         <tr class="tasks__item task
@@ -32,13 +32,13 @@
         ">
           <td class="task__select">
             <label class="checkbox task__checkbox">
-              <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" value="<?= esc($value['id']) ?>">
+              <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" value="<?= esc($value['id']) ?>" <?= $value['done'] ? 'checked' : '' ?>>
               <span class="checkbox__text"><?= esc($value['task']) ?></span>
             </label>
           </td>
 
           <td class="task__file">
-            <a class="download-link" href="<?= $value['file'] ? $value['file'] : '' ?>">Home.psd</a>
+            <a class="download-link" href="<?= isset($value['file']) ? $value['file'] : '' ?>"><?= isset($value['file']) ? mb_strimwidth($value['file'], 9, mb_strwidth($value['file'])) : '' ?></a>
           </td>
 
           <td class="task__date"><?= $value['date'] ?></td>

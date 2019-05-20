@@ -1,5 +1,4 @@
 <?php
-
 require_once('functions.php');
 require_once('helpers.php');
 
@@ -83,8 +82,6 @@ if (isset($_SESSION['user'])) {
       case 'out_of_date':
           $sql .= " and `deadline` < NOW()";
           break;
-      default:
-          $sql = $sql;
     }
 
     $res = mysqli_query($connection_resourse, $sql);
@@ -95,12 +92,16 @@ if (isset($_SESSION['user'])) {
 
     // Полнотекстовый поиск ------
     $search = trim($_GET['search']);
-    $sql = "SELECT id, `name` AS `task`, `deadline` AS `date`, `status` AS `done`, `project_id` AS `category`, file FROM tasks WHERE MATCH (name) AGAINST (?)";
+    $sql = "SELECT id, `name` AS `task`, `deadline` AS `date`, `status` AS `done`, `project_id` AS `category`, file FROM tasks WHERE MATCH (name) AGAINST (?) AND user_id = $u_id";
 
     $stmt = db_get_prepare_stmt($connection_resourse, $sql, $data = [$search]);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
     $tasks = parse_result($result, $connection_resourse, $sql, false);
+    
+    if (mysqli_num_rows($result) < 1) {
+      $tasks = NULL;
+    }
     mysqli_free_result($result);
 
   } else {
@@ -156,7 +157,7 @@ if (isset($_SESSION['user'])) {
   // Поключение лэйаута с включением в него шаблона
   $layout_content = include_template('layout.php', [
       'content' => $page_content,
-      'page_title' => 'Hello '
+      'page_title' => 'Дела в порядке? '
   ]);
 }
 

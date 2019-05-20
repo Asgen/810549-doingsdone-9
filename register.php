@@ -1,7 +1,4 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-ini_set('error_reporting', E_ALL);
 require_once('functions.php');
 require_once('helpers.php');
 
@@ -62,13 +59,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		// Выполняем подготовленный запрос.
 		$result = mysqli_stmt_execute($stmt);
 
-		if (!$result) {
-			print("Ошибка подключения к БД " . mysqli_connect_error());
-        	die();
-		}
+		parse_result($result, $connection_resourse, $sql);
 
 		// Редирект на страницу входа, если пользователь был успешно добавлен в БД.
 		if ($result && empty($errors)) {
+
+			session_start();
+			$user = [
+				'id' => mysqli_insert_id($connection_resourse),
+				'email' => $email,
+				'name' => $form['name'],
+				'password' => $password
+			];
+			$_SESSION['user'] = $user;
+
 		    header("Location: /");
             die();
 		}
@@ -87,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 // Поключение лэйаута
 $layout_content = include_template('layout.php', [
 	'content' => $page_content,
-	'page_title' => 'Hello ',
+	'page_title' => 'Регистрация ',
 	'user_name' => 'Мистер Твикс'
 ]);
 
