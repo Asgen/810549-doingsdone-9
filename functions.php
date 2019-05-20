@@ -51,6 +51,10 @@ function parse_result ($result, $connection_resourse, $sql, $fetch = false) {
         die();
     }
 
+    if (is_bool($result)) {
+        return;
+    }
+
     if ($fetch) {
         return mysqli_fetch_assoc($result);
     }
@@ -83,3 +87,20 @@ function get_projects ($connection_resourse, $user_id) {
 
     return parse_result($result, $connection_resourse, $sql);
 }
+
+/* 
+ * filtering an array 
+ */ 
+function filter_by_value ($array, $index, $value){ 
+    if(is_array($array) && count($array)>0)  
+    { 
+        foreach(array_keys($array) as $key){ 
+            $temp[$key] = $array[$key][$index]; 
+             
+            if ($temp[$key] == $value){ 
+                $newarray[$key] = $array[$key]; 
+            } 
+        } 
+      } 
+  return $newarray; 
+} 

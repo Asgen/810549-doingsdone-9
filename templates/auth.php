@@ -4,24 +4,20 @@
   <div class="form__row">
     <label class="form__label" for="email">E-mail <sup>*</sup></label>
 
-    <input class="form__input <?= isset($errors['email']) ? 'form__input--error' : '' ?>" type="text" name="email" id="email" value="<?= esc($form['email'] ?? '') ?>" placeholder="Введите e-mail">
-    
-    <?php if (isset($errors['email'])) : ?>
-      <p class="form__message"><?= $errors['email'] ?></p>
-    <?php endif ?>
+    <input class="form__input" type="text" name="email" id="email" value="<?= esc($form['email'] ?? '') ?>" placeholder="Введите e-mail">
   </div>
 
   <div class="form__row">
     <label class="form__label" for="password">Пароль <sup>*</sup></label>
 
-    <input class="form__input <?= isset($errors['name']) ? 'form__input--error' : '' ?>" type="password" name="password" id="password" value="<?= esc($form['password'] ?? '') ?>" placeholder="Введите пароль">
-
-    <?php if (isset($errors['password'])) : ?>
-      <p class="form__message"><?= $errors['password'] ?></p>
-    <?php endif ?>
+    <input class="form__input" type="password" name="password" id="password" value="" placeholder="Введите пароль">
   </div>
 
   <div class="form__row form__row--controls">
+    <?php if (isset($errors['email']) || isset($errors['name'])) : ?>
+      <p class="error-message">Вы ввели неверный email/пароль</p>
+    <?php endif ?>
+
     <input class="button" type="submit" name="" value="Войти">
   </div>
 </form>

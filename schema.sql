@@ -30,6 +30,4 @@ CREATE TABLE users (
 ) ENGINE=InnoDB CHARSET=utf8;
 
 CREATE INDEX project ON projects(name);
-CREATE INDEX deadline ON tasks(deadline);
-CREATE INDEX task ON tasks(name);
 CREATE FULLTEXT INDEX task_ft_search ON tasks(name);

@@ -1,13 +1,13 @@
 <?php
-
-ini_set('error_reporting', E_ALL);
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-
 require_once('functions.php');
 require_once('helpers.php');
 
 session_start();
+
+if (isset($_SESSION['user'])) {
+header("Location: /index.php");
+die();
+}
 
 // Если сценарий был вызван отправкой формы
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 	$user = $res ? mysqli_fetch_array($res, MYSQLI_ASSOC) : null;
 
-	if (!count($errors) and $user) {
+	if (!count($errors) && $user) {
 		// Сравниваем хеши паролей и если совпадают то записываем в сессию
 		if (password_verify($form['password'], $user['password'])) {
 			$_SESSION['user'] = $user;
@@ -65,12 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	}
 } else {
 
-	if (isset($_SESSION['user'])) {
-        header("Location: /index.php");
-		die();
-    } else {
-        $page_content = include_template('auth.php', []);
-    }
+	$page_content = include_template('auth.php', []);
 
 	$layout = include_template('layout.php', [
 		'content' => $page_content,
