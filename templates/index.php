@@ -35,13 +35,13 @@
               <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" value="<?= esc($value['id']) ?>" <?= $value['done'] ? 'checked' : '' ?>>
               <span class="checkbox__text"><?= esc($value['task']) ?></span>
             </label>
-          </td>
+          </td>          
           
-          <?php if (isset($value['file'])) : ?>
-            <td class="task__file">
+          <td class="task__file">
+            <?php if (isset($value['file'])) : ?>
               <a class="download-link" href="<?= $value['file'] ?? '' ?>"><?= mb_strimwidth($value['file'], mb_strwidth('/uploads/'), mb_strwidth($value['file'])) ?></a>
-            </td>
-          <?php endif ?>
+            <?php endif ?>
+          </td>          
 
           <td class="task__date"><?= $value['date'] ?></td>
         </tr>
