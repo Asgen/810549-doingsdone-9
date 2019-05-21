@@ -4,8 +4,9 @@
  * @param string $str Строка для обработки
  * @return string Преобразованная строка
  */
-function esc($str) {
-  return htmlspecialchars($str, ENT_QUOTES);
+function esc($str)
+{
+    return htmlspecialchars($str, ENT_QUOTES);
 }
 
 /**
@@ -14,7 +15,8 @@ function esc($str) {
  * @param array $data Ассоциативный массив с данными для шаблона
  * @return string Итоговый HTML
  */
-function include_template($name, array $data = []) {
+function include_template($name, array $data = [])
+{
     $name = 'templates/' . $name;
     $result = '';
 
@@ -36,9 +38,9 @@ function include_template($name, array $data = []) {
  * @param string $date Дата в виде строки
  * @return bool True в случае если до выполнения осталось менее 24 часов
  */
-function is_important($date) {
-
-    if ($date === NULL) {
+function is_important($date)
+{
+    if ($date === null) {
         return false;
     }
 
@@ -58,7 +60,8 @@ function is_important($date) {
  * @param bool  $fetch Параметр возвращаемого массива
  * @return array Возвращает массив содержащий ассоциативные или обычные массивы с данными результирующей таблицы.
  */
-function parse_result ($result, $connection_resourse, $sql, $fetch = false) {
+function parse_result($result, $connection_resourse, $sql, $fetch = false)
+{
 
     // Если запрос неудачен, то выводим ошибку
     if (!$result) {
@@ -82,7 +85,8 @@ function parse_result ($result, $connection_resourse, $sql, $fetch = false) {
  * Устанавливает соединение с БД
  * @return object При успешном соединении возвращает ресурс соединения.
  */
-function connect_db () {
+function connect_db()
+{
     require_once('config/db.php');
 
     $connection_resourse = mysqli_connect($db['host'], $db['user'], $db['password'], $db['database']);
@@ -103,7 +107,8 @@ function connect_db () {
  * @param string  $user_id Идентификатор пользователя
  * @return array Возвращает ассоциативный массив с проектами.
  */
-function get_projects ($connection_resourse, $user_id) {
+function get_projects($connection_resourse, $user_id)
+{
 
     // Запрос на получение списка проектов для конкретного пользователя
     $sql = "SELECT p.NAME AS `category`, COUNT(t.id) `tasks_total`, p.id AS `project_id` FROM `projects` AS `p` LEFT JOIN `tasks` AS `t` ON p.id = t.project_id WHERE p.user_id = $user_id GROUP BY p.id";

@@ -1,9 +1,7 @@
 <?php
 
 session_start();
-$_SESSION['user'] = NULL;
+$_SESSION['user'] = null;
 
 header("Location: /index.php");
 die();
-
-?>
