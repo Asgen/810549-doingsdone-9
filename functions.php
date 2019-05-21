@@ -1,5 +1,9 @@
 <?php
-// Функция убирает опысные символы из строки
+/**
+ * Преобразует специальные символы в HTML-сущности
+ * @param string $str Строка для обработки
+ * @return string Преобразованная строка
+ */
 function esc($str) {
   return htmlspecialchars($str, ENT_QUOTES);
 }
@@ -27,7 +31,11 @@ function include_template($name, array $data = []) {
     return $result;
 }
 
-// Функция проверки времени для задания
+/**
+ * Проверяет оставшееся время до выполнения задачи
+ * @param string $date Дата в виде строки
+ * @return bool True в случае если до выполнения осталось менее 24 часов
+ */
 function is_important($date) {
 
     if ($date === NULL) {
@@ -39,10 +47,17 @@ function is_important($date) {
 
     $hours_to_deadline = floor(($task_date - $current_date) / 3600);
 
-return $hours_to_deadline <= 24;
+    return $hours_to_deadline <= 24;
 }
 
-// Функция обработки ответа обращения к БД
+/**
+ * Обрабатывает результат обращения к БД
+ * @param object or bool  $result Объект результата соединения или результат соединения
+ * @param object  $connection_resourse Ресурс соединения
+ * @param string  $sql Запрос
+ * @param bool  $fetch Параметр возвращаемого массива
+ * @return array Возвращает массив содержащий ассоциативные или обычные массивы с данными результирующей таблицы.
+ */
 function parse_result ($result, $connection_resourse, $sql, $fetch = false) {
 
     // Если запрос неудачен, то выводим ошибку
@@ -63,7 +78,10 @@ function parse_result ($result, $connection_resourse, $sql, $fetch = false) {
     return mysqli_fetch_all($result, MYSQLI_ASSOC);
 }
 
-// Установка соединения с БД
+/**
+ * Устанавливает соединение с БД
+ * @return object При успешном соединении возвращает ресурс соединения.
+ */
 function connect_db () {
     require_once('config/db.php');
 
@@ -79,6 +97,12 @@ function connect_db () {
     return $connection_resourse;
 }
 
+/**
+ * Получает список всез проектов пользователя
+ * @param object  $connection_resourse Ресурс соединения
+ * @param string  $user_id Идентификатор пользователя
+ * @return array Возвращает ассоциативный массив с проектами.
+ */
 function get_projects ($connection_resourse, $user_id) {
 
     // Запрос на получение списка проектов для конкретного пользователя
@@ -87,20 +111,3 @@ function get_projects ($connection_resourse, $user_id) {
 
     return parse_result($result, $connection_resourse, $sql);
 }
-
-/* 
- * filtering an array 
- */ 
-function filter_by_value ($array, $index, $value){ 
-    if(is_array($array) && count($array)>0)  
-    { 
-        foreach(array_keys($array) as $key){ 
-            $temp[$key] = $array[$key][$index]; 
-             
-            if ($temp[$key] == $value){ 
-                $newarray[$key] = $array[$key]; 
-            } 
-        } 
-      } 
-  return $newarray; 
-} 

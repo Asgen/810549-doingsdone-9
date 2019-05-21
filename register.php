@@ -62,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		parse_result($result, $connection_resourse, $sql);
 
 		// Редирект на страницу входа, если пользователь был успешно добавлен в БД.
-		if ($result && empty($errors)) {
+		if ($result) {
 
 			session_start();
 			$user = [
@@ -91,8 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 // Поключение лэйаута
 $layout_content = include_template('layout.php', [
 	'content' => $page_content,
-	'page_title' => 'Регистрация ',
-	'user_name' => 'Мистер Твикс'
+	'page_title' => 'Регистрация '
 ]);
 
 print($layout_content);

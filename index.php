@@ -12,17 +12,14 @@ if (isset($_SESSION['user'])) {
   // При успешном соединении формируем запрос к БД
   $u_id = $_SESSION['user']['id'];
 
-  // Переключение состояния задачи ------
+  /* Переключение состояния задачи ------ */
   if (isset($_GET['task_id'])) {
 
-  $task_id = (int)$_GET['task_id']; 
-  $task_status = (int)$_GET['check']; 
-  //print($task_id); 
-  // Меняем статус задачи на противоположный 
-  //$status = $task_status ? 0 : 1; 
+    $task_id = (int)$_GET['task_id']; 
+    $task_status = (int)$_GET['check']; 
 
-  $sql = "UPDATE tasks SET status = $task_status WHERE id = $task_id"; 
-  $res = mysqli_query($connection_resourse, $sql); 
+    $sql = "UPDATE tasks SET status = $task_status WHERE id = $task_id"; 
+    $res = mysqli_query($connection_resourse, $sql); 
 
     if (!$res) {
       print("Ошибка в запросе к БД. Запрос $sql " . mysqli_error($connection_resourse));
@@ -33,7 +30,7 @@ if (isset($_SESSION['user'])) {
     die();
   }
 
-  // Показать выполенные ------
+  /* Показать выполенные ------ */
   $show_completed_state = 'show_completed'; // Определимся как будет называться наша кука
   $show_complete_tasks = 0; // Значение по умолчанию
   $expire = strtotime("+30 days"); // Кука будет жить ровно 30 дней. Функция strtotime переводит дату в TIMESTAMP формат
@@ -45,15 +42,14 @@ if (isset($_SESSION['user'])) {
   }
 
   if (isset($_GET['show_completed'])) {
-    $state = $show_complete_tasks;
-    $show_complete_tasks = $state ? 0 : 1;
+    $show_complete_tasks = $_GET['show_completed'];
   }
 
   // Устанавливаем куку с помощью функции setcookie. Эта функция создаст новую куку, или обновит значение существующей.
   setcookie($show_completed_state, $show_complete_tasks, $expire, $path);
 
 
-  // Фильтрация ------
+  /* Фильтрация ------ */
   if (isset($_GET['filter'])) {
 
     $cur_date = date('Y-m-d');
@@ -77,7 +73,7 @@ if (isset($_SESSION['user'])) {
 
   } elseif (isset($_GET['search']) && !empty($_GET['search'])) {
 
-    // Полнотекстовый поиск ------
+    /* Полнотекстовый поиск ------ */
     $search = trim($_GET['search']);
     $sql = "SELECT id, `name` AS `task`, `deadline` AS `date`, `status` AS `done`, `project_id` AS `category`, file FROM tasks WHERE MATCH (name) AGAINST (?) AND user_id = $u_id";
 

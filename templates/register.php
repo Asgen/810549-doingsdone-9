@@ -32,7 +32,7 @@
   </div>
 
   <div class="form__row form__row--controls">
-    <?php if (isset($errors) && count($errors)) : ?>
+    <?php if (isset($errors)) : ?>
       <p class="error-message">Пожалуйста, исправьте ошибки в форме</p>
     <?php endif ?>
 

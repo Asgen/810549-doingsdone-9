@@ -36,10 +36,12 @@
               <span class="checkbox__text"><?= esc($value['task']) ?></span>
             </label>
           </td>
-
-          <td class="task__file">
-            <a class="download-link" href="<?= isset($value['file']) ? $value['file'] : '' ?>"><?= isset($value['file']) ? mb_strimwidth($value['file'], 9, mb_strwidth($value['file'])) : '' ?></a>
-          </td>
+          
+          <?php if (isset($value['file'])) : ?>
+            <td class="task__file">
+              <a class="download-link" href="<?= $value['file'] ?? '' ?>"><?= mb_strimwidth($value['file'], mb_strwidth('/uploads/'), mb_strwidth($value['file'])) ?></a>
+            </td>
+          <?php endif ?>
 
           <td class="task__date"><?= $value['date'] ?></td>
         </tr>

@@ -43,10 +43,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		if (password_verify($form['password'], $user['password'])) {
 			$_SESSION['user'] = $user;
 		} else {
-			$errors['password'] = 'Неверный пароль';
+			$errors['fired'] = '1';
 		}
-	} else {
-		$errors['email'] = 'Такой пользователь не найден';
+	} elseif (!$user && !count($errors)) {
+		$errors['fired'] = '1';
 	}
 
 	if (count($errors)) {
@@ -54,23 +54,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 			'form' => $form,
 			'errors' => $errors
 		]);
-
-		$layout = include_template('layout.php', [
-			'content' => $page_content,
-			'page_title' => 'Авторизация'
-		]);
 	} else {
 		header("Location: /index.php");
 		die();
 	}
 } else {
-
-	$page_content = include_template('auth.php', []);
-
-	$layout = include_template('layout.php', [
-		'content' => $page_content,
-		'page_title' => 'Авторизация'
-	]);
+	$page_content = include_template('auth.php', []);	
 }
+
+$layout = include_template('layout.php', [
+	'content' => $page_content,
+	'page_title' => 'Авторизация'
+]);
 
 print($layout);

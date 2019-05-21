@@ -22,7 +22,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	// В массиве $_POST содержатся все данные из формы
 	$task = $_POST;
 	$required = ['name', 'project'];
-	$dict = ['name' => 'Название', 'project' => 'Проект', 'file' => 'Файл', 'date' => 'Дата'];
 	$errors = [];
 
 	foreach ($required as $key) {
@@ -38,7 +37,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	}
 
 	// Проверим, был ли загружен файл
-	if (isset($_FILES['file'])) {
+	if (isset($_FILES['file']) && !$_FILES['file']['error']) {
+
 		$tmp_name = $_FILES['file']['tmp_name'];
 		$path = $_FILES['file']['name'];
 		move_uploaded_file($tmp_name, __DIR__  . '/uploads' . '/' . $path);

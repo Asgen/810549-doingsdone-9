@@ -18,7 +18,7 @@
         <?php foreach ($projects as $value) : ?>
           <option value="<?= $value['project_id'] ?? '' ?>" 
             <?= isset($task['project']) && $value['project_id'] === $task['project'] ? 'selected' : '' ?>>
-          <?= $value['category'] ?></option>
+          <?= esc($value['category']) ?></option>
         <?php endforeach ?>
       <?php endif ?>
     </select>
