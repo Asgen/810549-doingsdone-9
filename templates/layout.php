@@ -17,7 +17,7 @@
 
     <?php if (isset($user)): ?>
       <header class="main-header">
-        <a href="/">
+        <a href="/index.php?all_projects=1">
           <img src="img/logo.png" width="153" height="42" alt="Логотип Дела в порядке">
         </a>
 
@@ -47,7 +47,6 @@
     <?php endif; ?>
 
     <div class="content">
-
       <?php if (isset($user)): ?>
         <section class="content__side">
           <h2 class="content__side-heading">Проекты</h2>
@@ -55,7 +54,8 @@
             <ul class="main-navigation__list">
               <?php if (isset($projects)) : ?>
                 <?php foreach ($projects as $value) : ?>
-                  <li class="main-navigation__list-item <?= $value['project_id'] === $active_project ? ' main-navigation__list-item--active' : '' ?>">
+                  <li class="main-navigation__list-item <?= (int)$value['project_id'] == $active_project ? ' main-navigation__list-item--active' : '' ?>">
+
                     <a class="main-navigation__list-item-link" href=<?= 'index.php?project_id=' . $value['project_id'] ?>>
                       <?= esc($value['category']) ?>
                     </a>

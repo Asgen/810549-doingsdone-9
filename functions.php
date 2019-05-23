@@ -116,3 +116,18 @@ function get_projects($connection_resourse, $user_id)
 
     return parse_result($result, $connection_resourse, $sql);
 }
+
+/**
+ * Устанавливает куку
+ * @param string  $name Название куки
+ * @param string or int $value Значение по умолчанию
+ * @param string $days Количество дней жизни куки
+ * @param string $path Путь на сайте, по которому будет доступна кука. Слеш означает весь сайт
+ * @return Ничего не возвращает
+ */
+function set_cookie($name, $value, $days, $path = "/")
+{
+    $expire = strtotime("+$days days");
+    setcookie($name, $value, $expire, $path);
+    return;
+}

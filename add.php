@@ -15,6 +15,10 @@ $connection_resourse = connect_db();
 // Запрос на получение списка проектов для конкретного пользователя
 $projects = get_projects($connection_resourse, $_SESSION['user']['id']);
 
+// Активный проект
+if (isset($_COOKIE['choosen_project'])) {
+    $choosen_project = (int)$_COOKIE['choosen_project'];
+}
 
 // Если сценарий был вызван отправкой формы
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -24,36 +28,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $required = ['name', 'project'];
     $errors = [];
 
+    foreach ($task as $key => $value) {
+        $task[$key] = trim($value);
+    }
+
+    // Проверка заполненности полей
     foreach ($required as $key) {
-        if (empty($_POST[$key])) {
+        if (empty($task[$key])) {
             $errors[$key] = 'Это поле надо заполнить';
+        } elseif (strlen($task[$key]) > 200) {
+            $errors[$key] = 'Допустимое количество символов превышено!';
         }
     }
 
-    if (!empty($task['date'])) {
-        if (!is_date_valid($task['date']) || $task['date'] < date('Y-m-d')) {
-            $errors['date'] = 'Введите корректную дату';
+    // Валидация
+    if (!count($errors)) {
+        if (!empty($task['date'])) {
+            if (!is_date_valid($task['date']) || $task['date'] < date('Y-m-d')) {
+                $errors['date'] = 'Дата должна быть больше или равна текущей';
+            }
         }
-    }
 
-    // Проверим, был ли загружен файл
-    if (isset($_FILES['file']) && !$_FILES['file']['error']) {
-        $tmp_name = $_FILES['file']['tmp_name'];
-        $path = $_FILES['file']['name'];
-        move_uploaded_file($tmp_name, __DIR__  . '/uploads' . '/' . $path);
-        $file = '/uploads' . '/' . $path;
-    }
-
-    // Выбран существующий ли проект
-    $wrong_proj = true;
-    foreach ($projects as $value) {
-        if ($value['project_id'] === $task['project']) {
-            $wrong_proj = false;
-            break;
+        // Проверим, был ли загружен файл
+        if (isset($_FILES['file']) && !$_FILES['file']['error']) {
+            $tmp_name = $_FILES['file']['tmp_name'];
+            $path = uniqid();
+            move_uploaded_file($tmp_name, __DIR__  . '/uploads' . '/' . $path);
+            $file = '/uploads' . '/' . $path;
         }
-    }
-    if ($wrong_proj) {
-        $errors['project'] = 'Выберите существующий проект';
+
+        // Выбран существующий ли проект
+        $wrong_proj = true;
+        foreach ($projects as $value) {
+            if ($value['project_id'] === $task['project']) {
+                $wrong_proj = false;
+                break;
+            }
+        }
+        if ($wrong_proj) {
+            $errors['project'] = 'Выберите существующий проект';
+        }
     }
 
     // Если ошибок нет

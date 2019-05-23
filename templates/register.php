@@ -4,7 +4,7 @@
   <div class="form__row">
     <label class="form__label" for="email">E-mail <sup>*</sup></label>
 
-    <input class="form__input <?= isset($errors['email']) ? 'form__input--error' : '' ?>" type="text" name="email" id="email" value="<?= esc($form['email'] ?? '') ?>" placeholder="Введите e-mail">
+    <input class="form__input <?= isset($errors['email']) ? 'form__input--error' : '' ?>" type="text" name="email" id="email" value="<?= isset($form['email']) ? esc($form['email']) : '' ?>" placeholder="Введите e-mail">
     
     <?php if (isset($errors['email'])) : ?>
       <p class='form__message'><?= $errors['email'] ?></p>
@@ -14,7 +14,7 @@
   <div class="form__row">
     <label class="form__label" for="password">Пароль <sup>*</sup></label>
 
-    <input class="form__input <?= isset($errors['password']) ? 'form__input--error' : '' ?>" type="password" name="password" id="password" value="" placeholder="Введите пароль">
+    <input class="form__input <?= isset($errors['password']) ? 'form__input--error' : '' ?>" type="password" name="password" id="password" value="<?= isset($form['password']) ? esc($form['password']) : '' ?>" placeholder="Введите пароль">
 
     <?php if (isset($errors['password'])) : ?>
       <p class='form__message'><?= $errors['password'] ?></p>
@@ -24,7 +24,7 @@
   <div class="form__row">
     <label class="form__label" for="name">Имя <sup>*</sup></label>
 
-    <input class="form__input <?= isset($errors['name']) ? 'form__input--error' : '' ?>" type="text" name="name" id="name" value="<?= esc($form['name'] ?? '') ?>" placeholder="Введите имя">
+    <input class="form__input <?= isset($errors['name']) ? 'form__input--error' : '' ?>" type="text" name="name" id="name" value="<?= isset($form['name']) ? esc($form['name']) : '' ?>" placeholder="Введите имя">
 
     <?php if (isset($errors['name'])) : ?>
       <p class='form__message'><?= $errors['name'] ?></p>

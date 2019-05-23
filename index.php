@@ -7,6 +7,9 @@ session_start();
 if (isset($_SESSION['user'])) {
     $connection_resourse = connect_db();
     $choosen_project = 0;
+    $show_complete_tasks = 0;
+    $choosen_filter = 'show_all';
+    $cur_date = date('Y-m-d');
 
     // При успешном соединении формируем запрос к БД
     $u_id = $_SESSION['user']['id'];
@@ -16,7 +19,7 @@ if (isset($_SESSION['user'])) {
         $task_id = (int)$_GET['task_id'];
         $task_status = (int)$_GET['check'];
 
-        $sql = "UPDATE tasks SET status = $task_status WHERE id = $task_id";
+        $sql = "UPDATE tasks SET status = $task_status WHERE id = $task_id AND user_id = $u_id";
         $res = mysqli_query($connection_resourse, $sql);
 
         if (!$res) {
@@ -29,10 +32,6 @@ if (isset($_SESSION['user'])) {
     }
 
     /* Показать выполенные ------ */
-    $show_completed_state = 'show_completed'; // Определимся как будет называться наша кука
-    $show_complete_tasks = 0; // Значение по умолчанию
-    $expire = strtotime("+30 days"); // Кука будет жить ровно 30 дней. Функция strtotime переводит дату в TIMESTAMP формат
-    $path = "/"; // Путь на сайте, по которому будет доступна кука. Слеш означает весь сайт
 
     // Проверяем существование куки с этим именем. Если кука существует, то получаем её значение в переменную.
     if (isset($_COOKIE['show_completed'])) {
@@ -44,30 +43,10 @@ if (isset($_SESSION['user'])) {
     }
 
     // Устанавливаем куку с помощью функции setcookie. Эта функция создаст новую куку, или обновит значение существующей.
-    setcookie($show_completed_state, $show_complete_tasks, $expire, $path);
-
+    set_cookie('show_completed', $show_complete_tasks, 30);
 
     /* Фильтрация ------ */
-    if (isset($_GET['filter'])) {
-        $cur_date = date('Y-m-d');
-        $sql = "SELECT id, `name` AS `task`, `deadline` AS `date`, `status` AS `done`, `project_id` AS `category`, file FROM tasks WHERE user_id = $u_id";
-
-        switch ($_GET['filter']) {
-            case 'today':
-              $sql .= " and `deadline` = '$cur_date'";
-              break;
-            case 'tomorrow':
-              $sql .= " and `deadline` = '$cur_date' + INTERVAL 1 DAY";
-              break;
-            case 'out_of_date':
-              $sql .= " and `deadline` < NOW()";
-              break;
-        }
-
-        $res = mysqli_query($connection_resourse, $sql);
-        $tasks = parse_result($res, $connection_resourse, $sql);
-        mysqli_free_result($res);
-    } elseif (isset($_GET['search']) && !empty($_GET['search'])) {
+    if (isset($_GET['search']) && !empty($_GET['search'])) {
 
         /* Полнотекстовый поиск ------ */
         $search = trim($_GET['search']);
@@ -90,10 +69,67 @@ if (isset($_SESSION['user'])) {
         // Проверяем выбран ли проект
         if (isset($_GET['project_id'])) {
             $choosen_project = (int)$_GET['project_id'];
-            $sql .= " and `project_id` = ?";
+            set_cookie('choosen_project', $choosen_project, 30);
+        } elseif (isset($_COOKIE['choosen_project'])) {
+            $choosen_project = (int)$_COOKIE['choosen_project'];
+        } else {
+            set_cookie('choosen_project', $choosen_project, -30);
         }
 
-        $sql .= " ORDER BY datetime_add DESC";
+        // Проверяем фильтр
+        if (isset($_GET['filter'])) {
+            switch ($_GET['filter']) {
+                case 'show_all':
+                  $sql .= "";
+                  set_cookie('filter', 'show_all', 30);
+                  break;
+                case 'today':
+                  $sql .= " and `deadline` = '$cur_date' ";
+                  set_cookie('filter', 'today', 30);
+                  break;
+                case 'tomorrow':
+                  $sql .= " and `deadline` = '$cur_date' + INTERVAL 1 DAY ";
+                  set_cookie('filter', 'tomorrow', 30);
+                  break;
+                case 'out_of_date':
+                  $sql .= " and `deadline` < NOW() - 1 ";
+                  set_cookie('filter', 'out_of_date', 30);
+                  break;
+            }
+        } elseif (isset($_COOKIE['filter'])) {
+            switch ($_COOKIE['filter']) {
+                case 'show_all':
+                  $sql .= "";
+                  break;
+                case 'today':
+                  $sql .= " and `deadline` = '$cur_date' ";
+                  break;
+                case 'tomorrow':
+                  $sql .= " and `deadline` = '$cur_date' + INTERVAL 1 DAY ";
+                  break;
+                case 'out_of_date':
+                  $sql .= " and `deadline` < NOW() - 1 ";
+                  break;
+            }
+        }
+
+        if (isset($_GET['filter'])) {
+            $choosen_filter = $_GET['filter'];
+        } elseif (isset($_COOKIE['filter'])) {
+            $choosen_filter = $_COOKIE['filter'];
+        }
+
+
+        if (!$show_complete_tasks) {
+            $sql .= " AND `status` = 0";
+        }
+
+        if (isset($_GET['all_projects'])) {
+            $choosen_project = 0;
+            set_cookie('choosen_project', 0, -30);
+        }
+
+        $sql .= $choosen_project ? " and `project_id` = ?" : '';
 
         // Подготавливаем шаблон запроса
         $stmt = mysqli_prepare($connection_resourse, $sql);
@@ -109,14 +145,15 @@ if (isset($_SESSION['user'])) {
         $tasks = parse_result($result, $connection_resourse, $sql);
     }
 
+    // Запрос на получение списка проектов для конкретного пользователя
+    $projects = get_projects($connection_resourse, $u_id);
+
     // Подключение шаблона
     $page_content = include_template('index.php', [
     'tasks' => $tasks,
-    'show_complete_tasks' => $show_complete_tasks
+    'show_complete_tasks' => $show_complete_tasks,
+    'active_filter' => $choosen_filter
     ]);
-
-    // Запрос на получение списка проектов для конкретного пользователя
-    $projects = get_projects($connection_resourse, $u_id);
 
     // Поключение лэйаута с включением в него шаблона
     $layout_content = include_template('layout.php', [

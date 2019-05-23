@@ -4,7 +4,7 @@
   <div class="form__row">
     <label class="form__label" for="name">Название <sup>*</sup></label>
 
-    <input class="form__input <?= isset($errors['name']) ? 'form__input--error' : '' ?>" type="text" name="name" id="name" value="<?= esc($task['name'] ?? '') ?>" placeholder="Введите название">
+    <input class="form__input <?= isset($errors['name']) ? 'form__input--error' : '' ?>" type="text" name="name" id="name" value="<?= isset($task['name']) ? esc($task['name']) : '' ?>" placeholder="Введите название">
     <?php if (isset($errors['name'])) : ?>
       <p class='form__message'><?= $errors['name'] ?></p>
     <?php endif ?>

@@ -2,28 +2,43 @@
 require_once('functions.php');
 require_once('helpers.php');
 
+// Обнуляем куки
+set_cookie('choosen_project', 0, -30);
+set_cookie('show_completed', 0, -30);
+set_cookie('filter', 0, -30);
+
 // Если сценарий был вызван отправкой формы
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
 
     // В массиве $_POST содержатся все данные из формы
     $form = $_POST;
     $required = ['email', 'password', 'name'];
     $errors = [];
 
+    foreach ($form as $key => $value) {
+        $form[$key] = trim($value);
+    }
+
     foreach ($required as $key) {
-        if (empty($_POST[$key])) {
+        if (empty($form[$key])) {
             $errors[$key] = 'Это поле надо заполнить';
+        } elseif (strlen($form[$key]) > 200) {
+            $errors[$key] = 'Допустимое количество символов превышено!';
         }
     }
 
-    // Проверка пароля
-    if (strlen($form['password']) < 6) {
-        $errors['password'] = "Минимальная длина пароля 6 символов";
-    }
+    // Валидация заполненных полей
+    if (!count($errors)) {
+        // Проверка пароля
+        if (strlen($form['password']) < 6) {
+            $errors['password'] = "Минимальная длина пароля 6 символов";
+        }
 
-    // Проверка email
-    if (!filter_var($form['email'], FILTER_VALIDATE_EMAIL)) {
-        $errors['email'] = "E-mail адрес указан неверно.\n";
+        // Проверка email
+        if (!filter_var($form['email'], FILTER_VALIDATE_EMAIL)) {
+            $errors['email'] = "E-mail адрес указан неверно.\n";
+        }
     }
 
     // Проверка пользователя с введеным email

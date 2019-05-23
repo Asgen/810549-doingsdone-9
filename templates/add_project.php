@@ -4,7 +4,7 @@
   <div class="form__row">
     <label class="form__label" for="project_name">Название <sup>*</sup></label>
 
-    <input class="form__input <?= isset($errors['name']) ? 'form__input--error' : '' ?>" type="text" name="name" id="project_name" value="<?= esc($project['name'] ?? '') ?>" placeholder="Введите название проекта">
+    <input class="form__input <?= isset($errors['name']) ? 'form__input--error' : '' ?>" type="text" name="name" id="project_name" value="<?= isset($project['name']) ? esc($project['name']) : '' ?>" placeholder="Введите название проекта">
     
     <?php if (isset($errors['name'])) : ?>
       <p class='form__message'><?= $errors['name'] ?></p>
