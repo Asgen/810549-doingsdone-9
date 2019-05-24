@@ -43,10 +43,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Валидация
     if (!count($errors)) {
-        if (!empty($task['date'])) {
-            if (!is_date_valid($task['date']) || $task['date'] < date('Y-m-d')) {
-                $errors['date'] = 'Дата должна быть больше или равна текущей';
-            }
+
+        if (!is_date_valid($task['date']) || $task['date'] < date('Y-m-d')) {
+            $errors['date'] = 'Дата должна быть больше или равна текущей';
         }
 
         // Проверим, был ли загружен файл

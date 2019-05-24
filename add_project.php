@@ -95,7 +95,7 @@ $layout_content = include_template('layout.php', [
     'projects' => $projects,
     'content' => $page_content,
     'active_project' => $choosen_project ?? '',
-    'page_title' => 'Добавление задачи ',
+    'page_title' => 'Добавление проекта ',
     'user' => $_SESSION['user']
 ]);
 
