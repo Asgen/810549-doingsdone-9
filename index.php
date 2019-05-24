@@ -15,7 +15,7 @@ if (isset($_SESSION['user'])) {
     $u_id = $_SESSION['user']['id'];
 
     /* Переключение состояния задачи ------ */
-    if (isset($_GET['task_id'])) {
+    if (isset($_GET['task_id']) && isset($_GET['check'])) {
         $task_id = (int)$_GET['task_id'];
         $task_status = (int)$_GET['check'];
 
@@ -56,7 +56,7 @@ if (isset($_SESSION['user'])) {
         mysqli_stmt_execute($stmt);
         $result = mysqli_stmt_get_result($stmt);
         $tasks = parse_result($result, $connection_resourse, $sql, false);
-    
+
         if (mysqli_num_rows($result) < 1) {
             $tasks = null;
         }

@@ -41,12 +41,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // Валидация
-    if (!count($errors)) {
-
+    if (!empty($task['date'])) {
         if (!is_date_valid($task['date']) || $task['date'] < date('Y-m-d')) {
             $errors['date'] = 'Дата должна быть больше или равна текущей';
         }
+    }
+
+    // Валидация
+    if (!count($errors)) {
 
         // Проверим, был ли загружен файл
         if (isset($_FILES['file']) && !$_FILES['file']['error']) {
